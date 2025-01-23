@@ -4,7 +4,9 @@
 			"path": "."
 		}
 	],
-	"settings": {},
+	"settings": {
+		"pixelbyte.love2d.srcDir": "src/"
+	},
 	"extensions": {
 		"recommendations": [
 			"pixelbyte-studios.pixelbyte-love2d",
