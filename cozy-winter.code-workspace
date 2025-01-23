@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {},
+	"extensions": {
+		"recommendations": [
+			"pixelbyte-studios.pixelbyte-love2d",
+			"sumneko.lua"
+		]
+	}
+}
