@@ -9,5 +9,5 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.rectangle("fill", x, 50, 50, 50);
+    love.graphics.rectangle("fill", x, 50, 50, 50)
 end
