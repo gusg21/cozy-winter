@@ -1,11 +1,10 @@
 --- A quaternion and associated utilities.
 -- @module quat
 
-local modules       = (...):gsub('%.[^%.]+$', '') .. "."
-local constants     = require(modules .. "constants")
-local vec3          = require(modules .. "vec3")
-local precond       = require(modules .. "_private_precond")
-local private       = require(modules .. "_private_utils")
+local constants     = require("cpml/constants")
+local vec3          = require("cpml/vec3")
+local precond       = require("cpml/_private_precond")
+local private       = require("cpml/_private_utils")
 local DOT_THRESHOLD = constants.DOT_THRESHOLD
 local DBL_EPSILON   = constants.DBL_EPSILON
 local acos          = math.acos

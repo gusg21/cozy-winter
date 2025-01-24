@@ -2,9 +2,9 @@
 -- @module utils
 
 local modules = (...): gsub('%.[^%.]+$', '') .. "."
-local vec2    = require(modules .. "vec2")
-local vec3    = require(modules .. "vec3")
-local private = require(modules .. "_private_utils")
+local vec2    = require("cpml/vec2")
+local vec3    = require("cpml/vec3")
+local private = require("cpml/_private_utils")
 local abs     = math.abs
 local ceil    = math.ceil
 local floor   = math.floor

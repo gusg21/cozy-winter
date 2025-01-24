@@ -1,9 +1,8 @@
 --- A 3 component vector.
 -- @module vec3
 
-local modules = (...):gsub('%.[^%.]+$', '') .. "."
-local precond = require(modules .. "_private_precond")
-local private = require(modules .. "_private_utils")
+local precond = require("cpml/_private_precond")
+local private = require("cpml/_private_utils")
 local sqrt    = math.sqrt
 local cos     = math.cos
 local sin     = math.sin

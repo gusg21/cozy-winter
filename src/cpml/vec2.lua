@@ -2,11 +2,11 @@
 -- @module vec2
 
 local modules = (...):gsub('%.[^%.]+$', '') .. "."
-local vec3    = require(modules .. "vec3")
-local precond = require(modules .. "_private_precond")
-local private = require(modules .. "_private_utils")
+local vec3    = require("cpml/vec3")
+local precond = require("cpml/_private_precond")
+local private = require("cpml/_private_utils")
 local acos    = math.acos
-local atan2   = math.atan2 or math.atan
+local atan2   = math.atan
 local sqrt    = math.sqrt
 local cos     = math.cos
 local sin     = math.sin
