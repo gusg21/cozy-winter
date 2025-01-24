@@ -22,7 +22,7 @@ function love.load()
 end
 
 function love.update(dt)
-    player:update(dt)
+    world.bedroom:update(dt)
 
     push:resize(love.graphics.getWidth(), love.graphics.getHeight());
 end
