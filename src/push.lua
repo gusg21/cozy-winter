@@ -124,6 +124,8 @@ function push:initValues()
     if self._pixelperfect then scale = math.floor(scale) end
     
     self._OFFSET = {x = (self._SCALE.x - scale) * (self._WWIDTH/2), y = (self._SCALE.y - scale) * (self._WHEIGHT/2)}
+    self._OFFSET.x = math.floor(self._OFFSET.x)
+    self._OFFSET.y = math.floor(self._OFFSET.y)
     self._SCALE.x, self._SCALE.y = scale, scale --apply same scale to X and Y
   end
   

@@ -1,10 +1,6 @@
 local push = require("push")
 
 local gameWidth, gameHeight = 500, 500
-local windowWidth, windowHeight = love.window.getDesktopDimensions()
-windowWidth, windowHeight = windowWidth*.7, windowHeight*.7
-
-push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {fullscreen = false})
 
 local player_new = require("player")
 local player
@@ -14,10 +10,14 @@ function love.load()
 
     player = player_new()
     bg = love.graphics.newImage("assets/bgs/test_room.png")
+
+    push:setupScreen(gameWidth, gameHeight, love.graphics.getWidth(), love.graphics.getHeight(), {fullscreen = false, pixelperfect = true, highdpi = false, resizable =  true})
 end
 
 function love.update(dt)
     player:update(dt)
+
+    push:resize(love.graphics.getWidth(), love.graphics.getHeight());
 end
 
 function love.draw()
