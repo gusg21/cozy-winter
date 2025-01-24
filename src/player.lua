@@ -3,11 +3,7 @@ local vec2 = require("cpml/vec2")
 
 local function player_update(player, dt)
     if love.mouse.isDown(1) then
-        local mouseX, mouseY = push:toGame(love.mouse.getX() - (player.size.x), love.mouse.getY() - (player.size.y))
-        if mouseX ~= nil and mouseY ~= nil then
-            player.target.x = mouseX
-            player.target.y = mouseY
-        end
+        -- move to target object
     end
     if math.abs(player.target.x - player.pos.x) > 0.1 and math.abs(player.target.y - player.pos.y) > 0.1 then
         local dir = vec2.new(player.target.x - player.pos.x, player.target.y - player.pos.y)
