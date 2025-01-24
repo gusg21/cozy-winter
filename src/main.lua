@@ -2,11 +2,19 @@ local push = require("push")
 
 local gameWidth, gameHeight = 500, 500
 
+local room_new = require("room")
+local bedroom
+
 local player_new = require("player")
 local player
 
+local world = {}
+
 function love.load()
     love.window.setTitle("Hooky and Smoochus <3")
+
+    table.insert(world, bedroom)
+    world.bedroom = room_new("assets/bgs/test_room.png")
 
     player = player_new()
     bg = love.graphics.newImage("assets/bgs/test_room.png")
@@ -23,8 +31,7 @@ end
 function love.draw()
     push:setBorderColor(0.2, 0.2, 0.2)
     push:start()
-    love.graphics.draw(bg, (gameWidth/2)-(bg:getWidth()/2),
-                           (gameHeight/2)-(bg:getHeight()/2))
+    world.bedroom:draw(gameWidth, gameHeight)
     player:draw()
     push:finish()
 end
