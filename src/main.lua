@@ -1,13 +1,14 @@
-local x
+local player_new = require("player")
+local player
 
 function love.load()
-    x = 10
+    player = player_new()
 end
 
 function love.update(dt)
-    x = x + dt * 10
+    player:update(dt)
 end
 
 function love.draw()
-    love.graphics.rectangle("fill", x, 50, 50, 50)
+    player:draw()
 end
