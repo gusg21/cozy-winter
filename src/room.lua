@@ -25,6 +25,13 @@ local function room_update(room, dt)
             else
                 room.findex = room.findex - 1
             end
+            while room.furniture[room.findex].colliders == nil do
+                if room.findex == 1 then
+                    room.findex = #room.furniture
+                else
+                    room.findex = room.findex - 1
+                end
+            end
             room.cindex = 1
             key_down_this_frame = true
         end
@@ -33,6 +40,13 @@ local function room_update(room, dt)
                 room.findex = 1
             else
                 room.findex = room.findex + 1
+            end
+            while room.furniture[room.findex].colliders == nil do
+                if room.findex == #room.furniture then
+                    room.findex = 1
+                else
+                    room.findex = room.findex + 1
+                end
             end
             room.cindex = 1
             key_down_this_frame = true
@@ -152,7 +166,7 @@ local function room_draw(room, sw, sh)
         (sh / 2) - (room.bg:getHeight() / 2))
     for i, furniture in ipairs(room.furniture) do
         love.graphics.draw(furniture.image, furniture.x + room.bg:getWidth() / 2, furniture.y + room.bg:getHeight() / 2)
-        if edit and editing_col then
+        if edit and editing_col and furniture.colliders ~= nil then
             love.graphics.setColor(0, 1, 0)
             love.graphics.polygon("line", furniture.colliders)
             love.graphics.setColor(1, 1, 1)
@@ -194,7 +208,7 @@ local function room_new(bgfilename, furniturelist, floorcolliders)
     return {
         bg = love.graphics.newImage(bgfilename),
         furniture = furniturelist,
-        findex = 1,
+        findex = 4,
         floorcols = floorcolliders,
         cindex = 1,
         update = room_update,

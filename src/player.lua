@@ -42,9 +42,11 @@ local function player_update(player, world, dt)
         local mouGame = push:toGame(love.mouse.getPosition()) ~= nil
 
         for i,furniture in ipairs(world.currentRoom.furniture) do
-            if mouX and mouY and mouGame and pointInConvexPolygon(x, y, furniture.colliders) and furniture.hascolliders then
-                if furniture.on_clicked ~= nil then
-                    furniture.on_clicked(player)
+            if furniture.colliders ~= nil then
+                if mouX and mouY and mouGame and pointInConvexPolygon(x, y, furniture.colliders) then
+                    if furniture.on_clicked ~= nil then
+                        furniture.on_clicked(player)
+                    end
                 end
             end
         end
