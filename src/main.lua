@@ -21,12 +21,13 @@ function love.load()
     world.bedroom = room_new("assets/bgs/test_room.png", roomlist.bedroom, roomlist.bedroom_floorcolliders)
     world.currentRoom = world.bedroom
 
-    player = player_new()
+    table.insert(world, player)
+    world.player = player_new()
 end
 
 function love.update(dt)
     world.bedroom:update(dt)
-    player:update(world, dt)
+    world.player:update(world, dt)
     push:resize(love.graphics.getWidth(), love.graphics.getHeight());
 end
 
@@ -35,7 +36,7 @@ function love.draw()
     push:start()
 
     world.bedroom:draw(gameWidth, gameHeight)
-    player:draw()
+    world.player:draw()
 
     push:finish()
 end
