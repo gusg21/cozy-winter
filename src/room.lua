@@ -25,11 +25,13 @@ local function room_update(room, dt)
             else
                 room.findex = room.findex - 1
             end
-            while room.furniture[room.findex].colliders == nil do
-                if room.findex == 1 then
-                    room.findex = #room.furniture
-                else
-                    room.findex = room.findex - 1
+            if editing_col and not edit_floor then
+                while room.furniture[room.findex].colliders == nil do
+                    if room.findex == 1 then
+                        room.findex = #room.furniture
+                    else
+                        room.findex = room.findex - 1
+                    end
                 end
             end
             room.cindex = 1
@@ -41,11 +43,13 @@ local function room_update(room, dt)
             else
                 room.findex = room.findex + 1
             end
-            while room.furniture[room.findex].colliders == nil do
-                if room.findex == #room.furniture then
-                    room.findex = 1
-                else
-                    room.findex = room.findex + 1
+            if editing_col and not edit_floor then
+                while room.furniture[room.findex].colliders == nil do
+                    if room.findex == #room.furniture then
+                        room.findex = 1
+                    else
+                        room.findex = room.findex + 1
+                    end
                 end
             end
             room.cindex = 1
@@ -169,7 +173,8 @@ local function room_draw(room, world, sw, sh)
     -- draw back furniture
     for i, furniture in ipairs(room.furniture) do
         if not furniture.front then
-            love.graphics.draw(furniture.image, furniture.x + room.bg:getWidth() / 2, furniture.y + room.bg:getHeight() / 2)
+            love.graphics.draw(furniture.image, furniture.x + room.bg:getWidth() / 2,
+                furniture.y + room.bg:getHeight() / 2)
         end
         if edit and editing_col and not edit_floor and furniture.colliders ~= nil and not furniture.front then
             love.graphics.setColor(0, 1, 0)
@@ -180,11 +185,12 @@ local function room_draw(room, world, sw, sh)
 
     -- draw player
     world.player:draw()
-    
+
     -- draw front furniture
     for i, furniture in ipairs(room.furniture) do
         if furniture.front then
-            love.graphics.draw(furniture.image, furniture.x + room.bg:getWidth() / 2, furniture.y + room.bg:getHeight() / 2)
+            love.graphics.draw(furniture.image, furniture.x + room.bg:getWidth() / 2,
+                furniture.y + room.bg:getHeight() / 2)
         end
         if edit and editing_col and not edit_floor and furniture.colliders ~= nil and furniture.front then
             love.graphics.setColor(0, 1, 0)
@@ -225,7 +231,7 @@ local function room_new(bgfilename, furniturelist, floorcolliders)
     return {
         bg = love.graphics.newImage(bgfilename),
         furniture = furniturelist,
-        findex = 4,
+        findex = 1,
         floorcols = floorcolliders,
         cindex = 1,
         update = room_update,

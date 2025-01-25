@@ -61,14 +61,14 @@ return {
         {
             name = "grandfather clock",
             image = love.graphics.newImage("assets/furniture/grandfather_clock.png"),
-            x = -180,
-            y = 0,
+            x = -429,
+            y = -654,
         },
         {
             name = "tv stand",
             image = love.graphics.newImage("assets/furniture/tv_stand.png"),
-            x = -52,
-            y = -176,
+            x = -262,
+            y = -496,
         },
     },
     livingroom_floorcolliders = 
