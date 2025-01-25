@@ -25,20 +25,20 @@ local function room_update(room, dt)
     end
 
     -- SELECTING COLLIDER
-    if not key_down_this_frame and love.keyboard.isDown("w") then
-        if room.findex == 1 then
-            room.findex = #room.furniture
+    if not key_down_this_frame and love.keyboard.isDown("s") then
+        if room.cindex == 1 then
+            room.cindex = #room.floorcols
         else
-            room.findex = room.findex - 1
+            room.cindex = room.cindex - 1
         end 
 
         key_down_this_frame = true
     end
-    if not key_down_this_frame and love.keyboard.isDown("s") then
-        if room.findex == #room.furniture then
-            room.findex = 1
+    if not key_down_this_frame and love.keyboard.isDown("w") then
+        if room.cindex == #room.floorcols then
+            room.cindex = 1
         else
-            room.findex = room.findex + 1
+            room.cindex = room.cindex + 1
         end 
 
         key_down_this_frame = true
@@ -53,7 +53,11 @@ local function room_update(room, dt)
     -- MOVE FURNITURE
     if not key_down_this_frame and love.keyboard.isDown("up") then
         if editing_col then
-            room.furniture[room.findex].cy = room.furniture[room.findex].cy - 1
+            if room.cindex % 2 ~= 0 then 
+                room.floorcols[room.cindex] = room.floorcols[room.cindex] + 1
+            else
+                room.floorcols[room.cindex] = room.floorcols[room.cindex] - 1
+            end
         else
             room.furniture[room.findex].y = room.furniture[room.findex].y - 1
         end
@@ -61,26 +65,22 @@ local function room_update(room, dt)
     end
     if not key_down_this_frame and love.keyboard.isDown("down") then
         if editing_col then
-            room.furniture[room.findex].cy = room.furniture[room.findex].cy + 1
+            if room.cindex % 2 ~= 0 then 
+                room.floorcols[room.cindex] = room.floorcols[room.cindex] - 1
+            else
+                room.floorcols[room.cindex] = room.floorcols[room.cindex] + 1
+            end
         else
             room.furniture[room.findex].y = room.furniture[room.findex].y + 1
         end
         key_down_this_frame = true
     end
     if not key_down_this_frame and love.keyboard.isDown("left") then
-        if editing_col then
-            room.furniture[room.findex].cx = room.furniture[room.findex].cx - 1
-        else
-            room.furniture[room.findex].x = room.furniture[room.findex].x - 1
-        end
+        room.furniture[room.findex].x = room.furniture[room.findex].x - 1
         key_down_this_frame = true
     end
     if not key_down_this_frame and love.keyboard.isDown("right") then
-        if editing_col then
-            room.furniture[room.findex].cx = room.furniture[room.findex].cx + 1
-        else
-            room.furniture[room.findex].x = room.furniture[room.findex].x + 1
-        end
+        room.furniture[room.findex].x = room.furniture[room.findex].x + 1
         key_down_this_frame = true
     end
 end
@@ -103,13 +103,14 @@ local function room_draw(room, sw, sh)
         love.graphics.polygon("line", room.floorcols)
     end
 
-
     -- draw editing text
     love.graphics.setColor(1,1,1)
     love.graphics.print(room.findex)
+    love.graphics.print(room.cindex, 140, 40)
     love.graphics.print(room.furniture[room.findex].name, 40, 0)
     love.graphics.print(room.furniture[room.findex].x, 0, 20)
     love.graphics.print(room.furniture[room.findex].y, 40, 20)
+    love.graphics.print(room.floorcols[room.cindex], 60, 20)
     love.graphics.print("editing colliders:", 0, 40)
     love.graphics.print(tostring(editing_col), 100, 40)
 
