@@ -216,4 +216,8 @@ local function room_new(bgfilename, furniturelist, floorcolliders)
     }
 end
 
+function swap_room(world, roomname)
+
+end
+
 return room_new

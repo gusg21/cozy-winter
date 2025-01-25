@@ -45,5 +45,29 @@ return {
         {
             -- will contain info about what room it goes to, etc.
         }
-    }
+    },
+    livingroom = {
+        {
+            name = "grandfather clock",
+            image = love.graphics.newImage("assets/furniture/grandfather_clock.png"),
+            x = -180,
+            y = 0,
+        },
+        {
+            name = "tv stand",
+            image = love.graphics.newImage("assets/furniture/tv_stand.png"),
+            x = -52,
+            y = -176,
+        },
+    },
+    livingroom_floorcolliders = 
+    {
+        56,324 , 206,248 , 392,348 , 248,420
+    },
+    livingroom_doorways = 
+    {
+        {
+            -- will contain info about what room it goes to, etc.
+        }
+    },
 }

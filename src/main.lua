@@ -9,6 +9,7 @@ local world = {
 local room_new = require("room")
 local roomlist = require("roomlists")
 local bedroom
+local livingroom
 
 local player_new = require("player")
 local player
@@ -18,7 +19,9 @@ function love.load()
     push:setupScreen(gameWidth, gameHeight, love.graphics.getWidth(), love.graphics.getHeight(), {fullscreen = false, pixelperfect = true, highdpi = false, resizable =  true})
 
     table.insert(world, bedroom)
-    world.bedroom = room_new("assets/bgs/test_room.png", roomlist.bedroom, roomlist.bedroom_floorcolliders)
+    world.bedroom = room_new("assets/bgs/bed_room.png", roomlist.bedroom, roomlist.bedroom_floorcolliders)
+    table.insert(world, livingroom)
+    world.livingroom = room_new("assets/bgs/living_room.png", roomlist.livingroom, roomlist.livingroom_floorcolliders)
     world.currentRoom = world.bedroom
 
     table.insert(world, player)
@@ -26,7 +29,7 @@ function love.load()
 end
 
 function love.update(dt)
-    world.bedroom:update(dt)
+    world.currentRoom:update(dt)
     world.player:update(world, dt)
     push:resize(love.graphics.getWidth(), love.graphics.getHeight());
 end
@@ -35,7 +38,7 @@ function love.draw()
     push:setBorderColor(0.2, 0.2, 0.2)
     push:start()
 
-    world.bedroom:draw(gameWidth, gameHeight)
+    world.currentRoom:draw(gameWidth, gameHeight)
     world.player:draw()
 
     push:finish()
