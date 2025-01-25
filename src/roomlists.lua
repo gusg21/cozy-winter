@@ -24,5 +24,9 @@ return {
             x = 72,
             y = -36
         },
+    },
+    bedroom_floorcolliders = 
+    {
+        40,332 , 206,248 , 412,354 , 248,436
     }
 }
