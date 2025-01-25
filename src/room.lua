@@ -161,25 +161,42 @@ love.keyreleased = function(key)
     key_down_this_frame = false
 end
 
-local function room_draw(room, sw, sh)
+local function room_draw(room, world, sw, sh)
+    -- draw background
     love.graphics.draw(room.bg, (sw / 2) - (room.bg:getWidth() / 2),
         (sh / 2) - (room.bg:getHeight() / 2))
+
+    -- draw back furniture
     for i, furniture in ipairs(room.furniture) do
-        love.graphics.draw(furniture.image, furniture.x + room.bg:getWidth() / 2, furniture.y + room.bg:getHeight() / 2)
-        if edit and editing_col and furniture.colliders ~= nil then
+        if not furniture.front then
+            love.graphics.draw(furniture.image, furniture.x + room.bg:getWidth() / 2, furniture.y + room.bg:getHeight() / 2)
+        end
+        if edit and editing_col and not edit_floor and furniture.colliders ~= nil and not furniture.front then
             love.graphics.setColor(0, 1, 0)
             love.graphics.polygon("line", furniture.colliders)
             love.graphics.setColor(1, 1, 1)
         end
     end
 
-    love.graphics.setColor(0, 0, 0, 0.5)
-    love.graphics.rectangle("fill", 100, 380, 50, 50)
-    love.graphics.setColor(1, 1, 1, 1)
+    -- draw player
+    world.player:draw()
+    
+    -- draw front furniture
+    for i, furniture in ipairs(room.furniture) do
+        if furniture.front then
+            love.graphics.draw(furniture.image, furniture.x + room.bg:getWidth() / 2, furniture.y + room.bg:getHeight() / 2)
+        end
+        if edit and editing_col and not edit_floor and furniture.colliders ~= nil and furniture.front then
+            love.graphics.setColor(0, 1, 0)
+            love.graphics.polygon("line", furniture.colliders)
+            love.graphics.setColor(1, 1, 1)
+        end
+    end
 
-    -- draw colliders
+    -- draw editor tools
     if edit then
-        if editing_col then
+        -- draw colliders
+        if editing_col and edit_floor then
             love.graphics.setColor(0, 1, 0)
 
             love.graphics.polygon("line", room.floorcols)

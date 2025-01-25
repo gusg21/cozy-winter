@@ -8,8 +8,7 @@ local world = {
 
 local room_new = require("room")
 local roomlist = require("roomlists")
-local bedroom
-local livingroom
+local bedroom, livingroom
 
 local player_new = require("player")
 local player
@@ -38,8 +37,7 @@ function love.draw()
     push:setBorderColor(0.2, 0.2, 0.2)
     push:start()
 
-    world.currentRoom:draw(gameWidth, gameHeight)
-    world.player:draw()
+    world.currentRoom:draw(world, gameWidth, gameHeight)
 
     push:finish()
 end
