@@ -5,19 +5,30 @@ local edit_floor = true
 
 local push = require("push")
 
-local function room_update(room, dt)
-    local shift_down
-    if love.keyboard.isDown("lshift") then
-        shift_down = 9
-    else
-        shift_down = 0
-    end
+local function room_swap_room(world)
+    world.currentRoom = world.livingroom
+    love.window.setMode(world.currentRoom.bg:getWidth(), world.currentRoom.bg:getHeight())
+end
+
+local function room_update(room, world, dt)
     -- EDIT MODE
     if not key_down_this_frame and love.keyboard.isDown("e") then
         edit = not edit
         key_down_this_frame = true
     end
+
+    if not key_down_this_frame and love.keyboard.isDown("l") then
+        room_swap_room(world)
+        key_down_this_frame = true
+    end
+
     if edit then
+        local shift_down
+        if love.keyboard.isDown("lshift") then
+            shift_down = 9
+        else
+            shift_down = 0
+        end
         -- SELECT FURNITURE
         if not key_down_this_frame and love.keyboard.isDown("a") then
             if room.findex == 1 then
@@ -100,6 +111,15 @@ local function room_update(room, dt)
 
         if not key_down_this_frame and love.keyboard.isDown("f") then
             edit_floor = not edit_floor
+            if editing_col and not edit_floor then
+                while room.furniture[room.findex].colliders == nil do
+                    if room.findex == 1 then
+                        room.findex = #room.furniture
+                    else
+                        room.findex = room.findex - 1
+                    end
+                end
+            end
             room.cindex = 1
             key_down_this_frame = true
         end
@@ -123,7 +143,7 @@ local function room_update(room, dt)
                     end
                 end
             else
-                room.furniture[room.findex].y = room.furniture[room.findex].y + 1 + shift_down
+                room.furniture[room.findex].y = room.furniture[room.findex].y - 1 - shift_down
             end
             key_down_this_frame = true
         end
@@ -145,7 +165,7 @@ local function room_update(room, dt)
                     end
                 end
             else
-                room.furniture[room.findex].y = room.furniture[room.findex].y - 1 - shift_down
+                room.furniture[room.findex].y = room.furniture[room.findex].y + 1 + shift_down
             end
             key_down_this_frame = true
         end
@@ -167,13 +187,12 @@ end
 
 local function room_draw(room, world, sw, sh)
     -- draw background
-    love.graphics.draw(room.bg, (sw / 2) - (room.bg:getWidth() / 2),
-        (sh / 2) - (room.bg:getHeight() / 2))
+    love.graphics.draw(room.bg, 0, 0)
 
     -- draw back furniture
     for i, furniture in ipairs(room.furniture) do
         if not furniture.front then
-            love.graphics.draw(furniture.image, furniture.x + room.bg:getWidth() / 2,
+            love.graphics.draw(furniture.image, furniture.x + (room.bg:getWidth() / 2),
                 furniture.y + room.bg:getHeight() / 2)
         end
         if edit and editing_col and not edit_floor and furniture.colliders ~= nil and not furniture.front then
@@ -234,13 +253,13 @@ local function room_new(bgfilename, furniturelist, floorcolliders)
         findex = 1,
         floorcols = floorcolliders,
         cindex = 1,
+        camera = {
+            x = 0,
+            y = 0
+        },
         update = room_update,
         draw = room_draw,
     }
-end
-
-function swap_room(world, roomname)
-
 end
 
 return room_new

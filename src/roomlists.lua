@@ -27,9 +27,9 @@ return {
             x = 72,
             y = -36,
             colliders = {336,242 , 371,225 , 446,263 , 446,334 , 413,348 , 336,309},
-            on_clicked = function(player)
-                player.target.x = 0
-                player.target.y = 0
+            on_clicked = function(world)
+                world.player.target.x = 0
+                world.player.target.y = 0
             end,
             front = false,
         },
@@ -46,9 +46,9 @@ return {
             x = -128,
             y = 12,
             colliders = {122,262 , 122,376 , 168,398 , 168,285},
-            on_clicked = function(player)
-                player.target.x = 0
-                player.target.y = 0
+            on_clicked = function(world)
+                world.player.target.x = 0
+                world.player.target.y = 0
             end,
             front = true,
         },
@@ -61,18 +61,39 @@ return {
         {
             name = "grandfather clock",
             image = love.graphics.newImage("assets/furniture/grandfather_clock.png"),
-            x = -429,
-            y = -654,
+            x = -64,
+            y = -302,
+            front = false,
         },
         {
             name = "tv stand",
             image = love.graphics.newImage("assets/furniture/tv_stand.png"),
-            x = -262,
-            y = -496,
+            x = 0,
+            y = 0,
+            front = false,
+        },
+        {
+            name = "couch",
+            image = love.graphics.newImage("assets/furniture/couch.png"),
+            x = 0,
+            y = 0,
+            colliders = {336,242 , 371,225 , 446,263 , 446,334 , 413,348 , 336,309},
+            on_clicked = function(world)
+                world.player.target.x = 0
+                world.player.target.y = 0
+            end,
+            front = false,
+        },
+        {
+            name = "side table",
+            image = love.graphics.newImage("assets/furniture/living_room_side_table.png"),
+            x = 0,
+            y = 0,
+            front = false,
         },
     },
     livingroom_floorcolliders = 
     {
-        56,324 , 206,248 , 392,348 , 248,420
+        32,344 , 364,178 , 732,362 , 398,526
     },
 }

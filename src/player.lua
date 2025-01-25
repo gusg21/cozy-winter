@@ -1,4 +1,3 @@
-local push = require("push")
 local vec2 = require("cpml/vec2")
 
 local mouse_down_this_frame = false
@@ -36,23 +35,22 @@ end
 local function player_update(player, world, dt)
     if not mouse_down_this_frame and love.mouse.isDown(1) then
         -- move to target object
-        local x, y = push:toGame(love.mouse.getPosition())
+        local x, y = love.mouse.getPosition()
         local mouX = x ~= nil
         local mouY = y ~= nil
-        local mouGame = push:toGame(love.mouse.getPosition()) ~= nil
 
         local furniture_event_found = false
         for i,furniture in ipairs(world.currentRoom.furniture) do
             if furniture.colliders ~= nil then
-                if mouX and mouY and mouGame and pointInConvexPolygon(x, y, furniture.colliders) then
+                if mouX and mouY and pointInConvexPolygon(x, y, furniture.colliders) then
                     if furniture.on_clicked ~= nil then
-                        furniture.on_clicked(player)
+                        furniture.on_clicked(world)
                         furniture_event_found = true
                     end
                 end
             end
         end
-        if not furniture_event_found and mouX and mouY and mouGame and pointInConvexPolygon(x, y, world.currentRoom.floorcols) then
+        if not furniture_event_found and mouX and mouY and pointInConvexPolygon(x, y, world.currentRoom.floorcols) then
                 player.target.x = x - (player.size.x/2)
                 player.target.y = y - (player.size.y/2)
         end
