@@ -1,25 +1,25 @@
+local push = require("push")
+local input = require("input")
+
 local editing_col = false
 local edit_floor = true
-
-local push = require("push")
 
 local function table_contains(tbl, x)
     local found = false
     for _, v in pairs(tbl) do
-        if v == x then 
-            found = true 
+        if v == x then
+            found = true
         end
     end
     return found
 end
 
-
-local function room_update(room, world, input, dt)
-    -- EDIT MODE
+local function room_update(room, world, dt)
+    -- Toggle edit mode
     if input.keyOnce("e") then
         room.editing = not room.editing
     end
-
+    -- Edit mode controls
     if room.editing then
         local shift_down
         if input.keyHeld("lshift") then
@@ -103,13 +103,15 @@ local function room_update(room, world, input, dt)
         end
 
         if input.keyOnce("f") then
-            edit_floor = not edit_floor
-            if editing_col and not edit_floor then
-                while room.furniture[room.findex].colliders == nil do
-                    if room.findex == 1 then
-                        room.findex = #room.furniture
-                    else
-                        room.findex = room.findex - 1
+            if editing_col then
+                edit_floor = not edit_floor
+                if not edit_floor then
+                    while room.furniture[room.findex].colliders == nil do
+                        if room.findex == 1 then
+                            room.findex = #room.furniture
+                        else
+                            room.findex = room.findex - 1
+                        end
                     end
                 end
             end
@@ -166,13 +168,16 @@ local function room_update(room, world, input, dt)
             room.furniture[room.findex].x = room.furniture[room.findex].x + 1 + shift_down
         end
     end
+
+    -- Player update
+    world.player:update(world, dt)
 end
 
 local function room_draw(room, world) -- TODO: Some things need to always render in front and behind
-    -- draw background
+    -- Draw background
     love.graphics.draw(room.bg, 0, 0)
 
-    -- depth table sort
+    -- Depth table sort
     local lowest
     local lowest_num = 10000
     local depth_draw_table = {}
@@ -189,8 +194,9 @@ local function room_draw(room, world) -- TODO: Some things need to always render
         table.insert(depth_draw_table, lowest)
     end
 
-    -- draw furniture and player
+    -- Draw furniture and player
     local player_drawn = false
+    local furniture_hovered = false
     for i, furniture in ipairs(depth_draw_table) do
         if not player_drawn then
             if world.player.pos.y - (room.bg:getWidth() / 2) < furniture.y then
@@ -199,33 +205,49 @@ local function room_draw(room, world) -- TODO: Some things need to always render
             end
         end
 
-        if furniture.image ~= nil then
-            love.graphics.draw(furniture.image, furniture.x + (room.bg:getWidth() / 2),
-            furniture.y + room.bg:getHeight() / 2)
+        -- TODO: Make hovered objects brighter with shader
+        if furniture.can_interact and input.mouseInCollider(furniture.colliders) then
+            furniture_hovered = true
+            love.mouse.setCursor(love.mouse.getSystemCursor("hand"))
+            love.graphics.setColor(0.8, 0.8, 0.8)
         end
 
+        if furniture.image ~= nil then
+            love.graphics.draw(furniture.image, furniture.x + (room.bg:getWidth() / 2),
+                furniture.y + room.bg:getHeight() / 2)
+        end
+
+        love.graphics.setColor(1, 1, 1)
+
+        -- Draw collider lines
         if room.editing and editing_col and not edit_floor and furniture.colliders ~= nil then
             love.graphics.setColor(0, 1, 0)
             love.graphics.polygon("line", furniture.colliders)
             love.graphics.setColor(1, 1, 1)
         end
     end
-    -- if player not drawn, draw them
+
+    -- If no objects clickable under mouse, make mouse normal
+    if not furniture_hovered then
+        love.mouse.setCursor()
+    end
+
+    -- If player not drawn, draw them
     if not player_drawn then
         world.player:draw()
         player_drawn = true
     end
 
-    -- draw editor tools
+    -- Draw editing mode
     if room.editing then
-        -- draw colliders
+        -- Draw floor colliders
         if editing_col and edit_floor then
             love.graphics.setColor(0, 1, 0)
 
             love.graphics.polygon("line", room.floorcols)
         end
 
-        -- draw editing text
+        -- Draw editing text
         love.graphics.setColor(1, 1, 1)
         love.graphics.print(room.findex)
         love.graphics.print(room.cindex, 140, 40)

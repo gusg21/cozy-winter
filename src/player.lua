@@ -1,44 +1,44 @@
 local vec2 = require("cpml/vec2")
+local input = require("input")
 
 local function pointInConvexPolygon(x, y, poly)
-	-- poly as {x1,y1, x2,y2, x3,y3, ...}
-	local imax = #poly
+    local imax = #poly
 
-	local function isVerticesClockwise(poly)
-		local sum = 0
-		local imax = #poly
-		local x1, y1 = poly[imax-1], poly[imax]
-		for i = 1, imax - 1, 2 do
-			local x2, y2 = poly[i], poly[i + 1]
-			sum = sum + (x2 - x1) * (y2 + y1)
-			x1, y1 = x2, y2
-		end
-		local isClockwise = sum < 0
-		return isClockwise
-	end
+    local function isVerticesClockwise(poly)
+        local sum = 0
+        local imax = #poly
+        local x1, y1 = poly[imax - 1], poly[imax]
+        for i = 1, imax - 1, 2 do
+            local x2, y2 = poly[i], poly[i + 1]
+            sum = sum + (x2 - x1) * (y2 + y1)
+            x1, y1 = x2, y2
+        end
+        local isClockwise = sum < 0
+        return isClockwise
+    end
 
-	local sign = isVerticesClockwise(poly) and 1 or -1
-	local x1, y1 = poly[imax-1], poly[imax]
-	for i = 1, imax - 1, 2 do
-		local x2, y2 = poly[i], poly[i + 1]
-		local dotProduct = (x - x1) * (y1 - y2) + (y - y1) * (x2 - x1)
-		if sign * dotProduct < 0 then
-			return false
-		end
-		x1, y1 = x2, y2
-	end
-	return true
+    local sign = isVerticesClockwise(poly) and 1 or -1
+    local x1, y1 = poly[imax - 1], poly[imax]
+    for i = 1, imax - 1, 2 do
+        local x2, y2 = poly[i], poly[i + 1]
+        local dotProduct = (x - x1) * (y1 - y2) + (y - y1) * (x2 - x1)
+        if sign * dotProduct < 0 then
+            return false
+        end
+        x1, y1 = x2, y2
+    end
+    return true
 end
 
-local function player_update(player, world, input, dt)
-    -- wasd movement
+local function player_update(player, world, dt)
+    -- Do WASD movement
     if not world.currentRoom.editing then
         local in_room = true
         local in_furniture = false
         if input.keyHeld("w") then
             local next_pos = player.pos.y - (player.speed * dt)
             for i, furniture in ipairs(world.currentRoom.furniture) do
-                if furniture.colliders ~= nil then
+                if furniture.colliders ~= nil and not furniture.trigger then
                     if pointInConvexPolygon(player.pos.x, next_pos, furniture.colliders) then
                         in_furniture = true
                     end
@@ -54,7 +54,7 @@ local function player_update(player, world, input, dt)
         if input.keyHeld("a") then
             local next_pos = player.pos.x - (player.speed * dt)
             for i, furniture in ipairs(world.currentRoom.furniture) do
-                if furniture.colliders ~= nil then
+                if furniture.colliders ~= nil and not furniture.trigger then
                     if pointInConvexPolygon(next_pos, player.pos.y, furniture.colliders) then
                         in_furniture = true
                     end
@@ -71,7 +71,7 @@ local function player_update(player, world, input, dt)
         if input.keyHeld("s") then
             local next_pos = player.pos.y + (player.speed * dt)
             for i, furniture in ipairs(world.currentRoom.furniture) do
-                if furniture.colliders ~= nil then
+                if furniture.colliders ~= nil and not furniture.trigger then
                     if pointInConvexPolygon(player.pos.x, next_pos, furniture.colliders) then
                         in_furniture = true
                     end
@@ -87,7 +87,7 @@ local function player_update(player, world, input, dt)
         if input.keyHeld("d") then
             local next_pos = player.pos.x + (player.speed * dt)
             for i, furniture in ipairs(world.currentRoom.furniture) do
-                if furniture.colliders ~= nil then
+                if furniture.colliders ~= nil and not furniture.trigger then
                     if pointInConvexPolygon(next_pos, player.pos.y, furniture.colliders) then
                         in_furniture = true
                     end
@@ -105,12 +105,13 @@ local function player_update(player, world, input, dt)
         in_room = true
         in_furniture = false
     end
+
+    -- Clicking on colliders
     if input.mouseOnce(1) then
-        -- move to target object
         local x, y = love.mouse.getPosition()
         local mouX = x ~= nil
         local mouY = y ~= nil
-        for i,furniture in ipairs(world.currentRoom.furniture) do
+        for i, furniture in ipairs(world.currentRoom.furniture) do
             if furniture.colliders ~= nil then
                 if mouX and mouY and pointInConvexPolygon(x, y, furniture.colliders) then
                     if furniture.on_clicked ~= nil then
@@ -123,12 +124,14 @@ local function player_update(player, world, input, dt)
 end
 
 local function player_draw(player)
+    -- Check if player flipped
     if player.flip_image then
-        love.graphics.draw(player.image, player.pos.x - player.size.x/2, player.pos.y- player.size.y/2, 0, -1, 1, player.image:getWidth() / 2, 0)
+        love.graphics.draw(player.image, player.pos.x - player.size.x / 2, player.pos.y - player.size.y / 2, 0, -1, 1,
+            player.image:getWidth() / 2, 0)
     else
-        love.graphics.draw(player.image, player.pos.x - player.size.x/2, player.pos.y- player.size.y/2, 0, 1, 1, player.image:getWidth() / 2, 0)
+        love.graphics.draw(player.image, player.pos.x - player.size.x / 2, player.pos.y - player.size.y / 2, 0, 1, 1,
+            player.image:getWidth() / 2, 0)
     end
-
 end
 
 local function player_new()
@@ -138,6 +141,7 @@ local function player_new()
         speed = 100,
         image = love.graphics.newImage("assets/player/hooky.png"),
         flip_image = false,
+        held_item = nil,
         update = player_update,
         draw = player_draw,
     }
