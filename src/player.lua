@@ -1,7 +1,5 @@
 local vec2 = require("cpml/vec2")
 
-local mouse_down_this_frame = false
-
 local function pointInConvexPolygon(x, y, poly)
 	-- poly as {x1,y1, x2,y2, x3,y3, ...}
 	local imax = #poly
@@ -32,51 +30,114 @@ local function pointInConvexPolygon(x, y, poly)
 	return true
 end
 
-local function player_update(player, world, dt)
-    if not mouse_down_this_frame and love.mouse.isDown(1) then
+local function player_update(player, world, input, dt)
+    -- wasd movement
+    if not world.currentRoom.editing then
+        local in_room = true
+        local in_furniture = false
+        if input.keyHeld("w") then
+            local next_pos = player.pos.y - (player.speed * dt)
+            for i, furniture in ipairs(world.currentRoom.furniture) do
+                if furniture.colliders ~= nil then
+                    if pointInConvexPolygon(player.pos.x, next_pos, furniture.colliders) then
+                        in_furniture = true
+                    end
+                end
+            end
+            if not pointInConvexPolygon(player.pos.x, next_pos, world.currentRoom.floorcols) then
+                in_room = false
+            end
+            if not in_furniture and in_room then
+                player.pos.y = next_pos
+            end
+        end
+        if input.keyHeld("a") then
+            local next_pos = player.pos.x - (player.speed * dt)
+            for i, furniture in ipairs(world.currentRoom.furniture) do
+                if furniture.colliders ~= nil then
+                    if pointInConvexPolygon(next_pos, player.pos.y, furniture.colliders) then
+                        in_furniture = true
+                    end
+                end
+            end
+            if not pointInConvexPolygon(next_pos, player.pos.y, world.currentRoom.floorcols) then
+                in_room = false
+            end
+            if not in_furniture and in_room then
+                player.pos.x = next_pos
+                player.flip_image = false
+            end
+        end
+        if input.keyHeld("s") then
+            local next_pos = player.pos.y + (player.speed * dt)
+            for i, furniture in ipairs(world.currentRoom.furniture) do
+                if furniture.colliders ~= nil then
+                    if pointInConvexPolygon(player.pos.x, next_pos, furniture.colliders) then
+                        in_furniture = true
+                    end
+                end
+            end
+            if not pointInConvexPolygon(player.pos.x, next_pos, world.currentRoom.floorcols) then
+                in_room = false
+            end
+            if not in_furniture and in_room then
+                player.pos.y = next_pos
+            end
+        end
+        if input.keyHeld("d") then
+            local next_pos = player.pos.x + (player.speed * dt)
+            for i, furniture in ipairs(world.currentRoom.furniture) do
+                if furniture.colliders ~= nil then
+                    if pointInConvexPolygon(next_pos, player.pos.y, furniture.colliders) then
+                        in_furniture = true
+                    end
+                end
+            end
+            if not pointInConvexPolygon(next_pos, player.pos.y, world.currentRoom.floorcols) then
+                in_room = false
+            end
+            if not in_furniture and in_room then
+                player.pos.x = next_pos
+                player.flip_image = true
+            end
+        end
+
+        in_room = true
+        in_furniture = false
+    end
+    if input.mouseOnce(1) then
         -- move to target object
         local x, y = love.mouse.getPosition()
         local mouX = x ~= nil
         local mouY = y ~= nil
-
-        local furniture_event_found = false
         for i,furniture in ipairs(world.currentRoom.furniture) do
             if furniture.colliders ~= nil then
                 if mouX and mouY and pointInConvexPolygon(x, y, furniture.colliders) then
                     if furniture.on_clicked ~= nil then
                         furniture.on_clicked(world)
-                        furniture_event_found = true
                     end
                 end
             end
         end
-        if not furniture_event_found and mouX and mouY and pointInConvexPolygon(x, y, world.currentRoom.floorcols) then
-                player.target.x = x - (player.size.x/2)
-                player.target.y = y - (player.size.y/2)
-        end
-        mouse_down_this_frame = true
     end
-    if math.abs(player.target.x - player.pos.x) > 0.1 and math.abs(player.target.y - player.pos.y) > 0.1 then
-        local dir = vec2.new(player.target.x - player.pos.x, player.target.y - player.pos.y)
-        player.pos = player.pos + (vec2.normalize(dir) * player.speed * dt)
-    end
-end
-
-love.mousereleased = function()
-    mouse_down_this_frame = false
 end
 
 local function player_draw(player)
-    love.graphics.draw(player.image, player.pos.x - player.size.x/2, player.pos.y- player.size.y/2)
+    if player.flip_image then
+        love.graphics.draw(player.image, player.pos.x - player.size.x/2, player.pos.y- player.size.y/2, 0, -1, 1, player.image:getWidth() / 2, 0)
+    else
+        love.graphics.draw(player.image, player.pos.x - player.size.x/2, player.pos.y- player.size.y/2, 0, 1, 1, player.image:getWidth() / 2, 0)
+    end
+
 end
 
 local function player_new()
     return {
-        pos = vec2.new(200, 300),
+        pos = vec2.new(215, 300),
         size = vec2.new(50, 50),
-        target = vec2.new(200, 300),
         speed = 100,
         image = love.graphics.newImage("assets/player/hooky.png"),
+        flip_image = false,
         update = player_update,
         draw = player_draw,
     }

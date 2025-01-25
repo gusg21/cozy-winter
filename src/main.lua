@@ -1,6 +1,6 @@
 local push = require("push")
 
-local gameWidth, gameHeight = 500, 500
+local input = require("input")
 
 local world = {
     currentRoom = nil,
@@ -29,10 +29,10 @@ function love.load()
 end
 
 function love.update(dt)
-    world.currentRoom:update(world, dt)
-    world.player:update(world, dt)
+    world.currentRoom:update(world, input, dt)
+    world.player:update(world, input, dt)
 end
 
 function love.draw()
-    world.currentRoom:draw(world, gameWidth, gameHeight)
+    world.currentRoom:draw(world)
 end
