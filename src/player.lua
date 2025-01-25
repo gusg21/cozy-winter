@@ -36,10 +36,10 @@ end
 local function player_update(player, world, dt)
     if not mouse_down_this_frame and love.mouse.isDown(1) then
         -- move to target object
-        x, y = push:toGame(love.mouse.getPosition())
-        mouX = x ~= nil
-        mouY = y ~= nil
-        mouGame = push:toGame(love.mouse.getPosition()) ~= nil
+        local x, y = push:toGame(love.mouse.getPosition())
+        local mouX = x ~= nil
+        local mouY = y ~= nil
+        local mouGame = push:toGame(love.mouse.getPosition()) ~= nil
         if mouX and mouY and mouGame and pointInConvexPolygon(x, y, world.currentRoom.floorcols) then
                 player.target.x = x - (player.size.x/2)
                 player.target.y = y - (player.size.y/2)
@@ -57,15 +57,16 @@ love.mousereleased = function()
 end
 
 local function player_draw(player)
-    love.graphics.rectangle("fill", player.pos.x, player.pos.y, player.size.x, player.size.y)
+    love.graphics.draw(player.image, player.pos.x - player.size.x/2, player.pos.y- player.size.y/2)
 end
 
 local function player_new()
     return {
-        pos = vec2.new(250, 250),
+        pos = vec2.new(200, 300),
         size = vec2.new(50, 50),
-        target = vec2.new(250, 250),
+        target = vec2.new(200, 300),
         speed = 100,
+        image = love.graphics.newImage("assets/player/hooky.png"),
         update = player_update,
         draw = player_draw,
     }
