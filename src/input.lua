@@ -83,7 +83,6 @@ love.mousepressed = function()
 end
 
 love.mousereleased = function()
-    print("RELEASED")
     mouse_down_this_frame = false
     mouse_released_this_frame = true
 end
