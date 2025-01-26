@@ -10,7 +10,7 @@ return {
         {
             name = "rug",
             image = love.graphics.newImage("assets/furniture/rug.png"),
-            x = -180,
+            x = -200,
             y = 0,
         },
         {
@@ -30,12 +30,12 @@ return {
             image = love.graphics.newImage("assets/furniture/bunk_bed.png"),
             x = 72,
             y = -36,
-            colliders = { 122, 262, 122, 376, 168, 398, 168, 285 },
+            colliders = { 322, 312, 332, 248, 450, 260, 448, 324 },
             on_clicked = function(world)
                 -- give items to Smoochus
             end,
             can_interact = true,
-            trigger = false,
+            trigger = true,
         },
         {
             name = "cat bed",
@@ -55,10 +55,12 @@ return {
             can_interact = true,
             trigger = true,
         },
+
+        -- TODO: FIX POS IN PLAYER, MAKE ALL COLLIDERS
     },
     bedroom_floorcolliders =
     {
-        56, 324, 206, 248, 392, 348, 248, 420
+        56, 324, 206, 248, 400, 348, 248, 420
     },
     livingroom = {
         {

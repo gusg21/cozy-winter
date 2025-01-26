@@ -126,18 +126,17 @@ end
 local function player_draw(player)
     -- Check if player flipped
     if player.flip_image then
-        love.graphics.draw(player.image, player.pos.x - player.size.x / 2, player.pos.y - player.size.y / 2, 0, -1, 1,
-            player.image:getWidth() / 2, 0)
+        love.graphics.draw(player.image, player.pos.x, player.pos.y, 0, -1, 1,
+            player.image:getWidth() / 2, player.image:getHeight() / 2)
     else
-        love.graphics.draw(player.image, player.pos.x - player.size.x / 2, player.pos.y - player.size.y / 2, 0, 1, 1,
-            player.image:getWidth() / 2, 0)
+        love.graphics.draw(player.image, player.pos.x, player.pos.y, 0, 1, 1,
+            player.image:getWidth() / 2, player.image:getHeight() / 2)
     end
 end
 
 local function player_new()
     return {
         pos = vec2.new(215, 300),
-        size = vec2.new(50, 50),
         speed = 100,
         image = love.graphics.newImage("assets/player/hooky.png"),
         flip_image = false,
