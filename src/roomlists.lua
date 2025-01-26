@@ -633,6 +633,60 @@ return {
             cx = 22,
             cy = 196,
         },
+        {
+            name = "ball10",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball10.png"),
+            x = -40,
+            y = 30,
+            cx = 0,
+            cy = 0,
+            always = "infront"
+        },
+        {
+            name = "ball11",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball11.png"),
+            x = -20,
+            y = 10,
+            cx = 0,
+            cy = 0,
+            always = "infront"
+        },
+        {
+            name = "ball12",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball12.png"),
+            x = 0,
+            y = 30,
+            cx = 0,
+            cy = 0,
+            always = "infront"
+        },
+        {
+            name = "ball13",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball13.png"),
+            x = 34,
+            y = -20,
+            cx = 0,
+            cy = 0,
+            always = "infront"
+        },
+        {
+            name = "ball14",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball14.png"),
+            x = 48,
+            y = 0,
+            cx = 0,
+            cy = 0,
+            always = "infront"
+        },
+        {
+            name = "ball15",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball15.png"),
+            x = 65,
+            y = -3,
+            cx = 0,
+            cy = 0,
+            always = "infront"
+        },
     },
     game_room_floor_colliders = {
         5, 282, 216, 178, 352, 246, 143, 351
