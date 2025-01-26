@@ -7,6 +7,9 @@ local input = require("input")
 local player
 local bedroom, livingroom, kitchen
 
+local bgtrack, ambience
+local play_music = true
+
 local world = {
     currentRoom = nil,
 }
@@ -16,6 +19,9 @@ function love.load()
     love.window.setTitle("Hooky and Smoochus <3")
     love.graphics.setBackgroundColor(0.91, 0.62, 0.72)
     love.window.setVSync(1)
+    bgtrack = love.audio.newSource("assets/audio/music/CARE.mp3", "static")
+    ambience = love.audio.newSource("assets/audio/music/PATIENCE.mp3", "static")
+    love.audio.play(bgtrack)
 
     -- Add objects to world
     table.insert(world, bedroom)
@@ -53,6 +59,14 @@ function love.load()
 end
 
 function love.update(dt)
+    if not bgtrack:isPlaying() and not ambience:isPlaying() then
+        play_music = not play_music
+    end
+    if play_music then
+        love.audio.play(bgtrack)
+    else
+        love.audio.play(ambience)
+    end
     world.currentRoom:update(world, dt)
     input.reset()
 end

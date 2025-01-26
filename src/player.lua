@@ -107,7 +107,6 @@ local function player_update(player, world, dt)
     end
 
     -- Clicking on colliders
-    -- TODO: proximity based clicking
     if input.mouseReleased(1) then
         local x, y = love.mouse.getPosition()
         local mouX = x ~= nil
@@ -116,7 +115,9 @@ local function player_update(player, world, dt)
             if furniture.colliders ~= nil and not furniture.hidden then
                 if mouX and mouY and pointInConvexPolygon(x, y, furniture.colliders) then
                     if furniture.on_clicked ~= nil then
-                        furniture.on_clicked(world, furniture)
+                        local uiclick = love.audio.newSource("assets/audio/sfx/UIClick.mp3", "static")
+                        love.audio.play(uiclick)
+                        furniture.on_clicked(world)
                     end
                 end
             end
