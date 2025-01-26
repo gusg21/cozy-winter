@@ -433,9 +433,9 @@ return {
             trigger = true,
             can_interact = true,
             on_clicked = function (world, furn)
-                furn.hidden = true
                 if world.task_num ~= 2 then return end
                 if world.player.held_item == nil then
+                    furn.hidden = true
                     world.player:hold_item({
                         image = furn.image,
                         furniture = furn,

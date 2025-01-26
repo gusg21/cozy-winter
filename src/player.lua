@@ -48,7 +48,7 @@ local function player_update(player, world, dt)
                     end
                 end
             end
-            for i, coltable in world.currentRoom.floorcols do
+            for i, coltable in ipairs(world.currentRoom.floorcols) do
                 if pointInConvexPolygon(player.pos.x, next_pos, coltable) then
                     in_room = true
                 end
@@ -67,7 +67,7 @@ local function player_update(player, world, dt)
                     end
                 end
             end
-            for i, coltable in world.currentRoom.floorcols do
+            for i, coltable in ipairs(world.currentRoom.floorcols) do
                 if pointInConvexPolygon(next_pos, player.pos.y, coltable) then
                     in_room = true
                 end
@@ -88,7 +88,7 @@ local function player_update(player, world, dt)
                     end
                 end
             end
-            for i, coltable in world.currentRoom.floorcols do
+            for i, coltable in ipairs(world.currentRoom.floorcols) do
                 if pointInConvexPolygon(player.pos.x, next_pos, coltable) then
                     in_room = true
                 end
@@ -107,7 +107,7 @@ local function player_update(player, world, dt)
                     end
                 end
             end
-            for i, coltable in world.currentRoom.floorcols do
+            for i, coltable in ipairs(world.currentRoom.floorcols) do
                 if pointInConvexPolygon(next_pos, player.pos.y, coltable) then
                     in_room = true
                 end
@@ -151,16 +151,18 @@ local function player_draw(player)
     -- Check if player flipped
     local image = player.image
     if player.is_moving then
-        love.graphics.draw(player.walk_images[math.floor(((love.timer.getTime() * 15) % 4) + 1)], player.pos.x, player.pos.y - 10, 0, flip_x, 1,
-        player.image:getWidth() / 2, player.image:getHeight() / 2)
+        love.graphics.draw(player.walk_images[math.floor(((love.timer.getTime() * 15) % 4) + 1)], player.pos.x,
+            player.pos.y - 10, 0, flip_x, 1,
+            player.image:getWidth() / 2, player.image:getHeight() / 2)
     else
         love.graphics.draw(player.image, player.pos.x, player.pos.y - 10, 0, flip_x, 1,
-        player.image:getWidth() / 2, player.image:getHeight() / 2)
+            player.image:getWidth() / 2, player.image:getHeight() / 2)
     end
-    
+
 
     if player.held_item ~= nil then
-        love.graphics.draw(player.held_item.image, player.pos.x, player.pos.y - 20, 0, flip_x, 1, player.held_item.image:getWidth() / 2,
+        love.graphics.draw(player.held_item.image, player.pos.x, player.pos.y - 20, 0, flip_x, 1,
+            player.held_item.image:getWidth() / 2,
             player.held_item.image:getHeight() / 2)
     end
 end
@@ -186,7 +188,7 @@ local function player_new()
         draw = player_draw,
         hold_item = player_hold_item,
         is_moving = false,
-        
+
     }
 end
 
