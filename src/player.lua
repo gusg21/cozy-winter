@@ -31,6 +31,8 @@ local function pointInConvexPolygon(x, y, poly)
 end
 
 local function player_update(player, world, dt)
+    player.is_moving = false
+
     if world.complete then return end
 
     -- Do WASD movement
@@ -51,6 +53,7 @@ local function player_update(player, world, dt)
             end
             if not in_furniture and in_room then
                 player.pos.y = next_pos
+                player.is_moving = true
             end
         end
         if input.keyHeld("a") then
@@ -68,6 +71,7 @@ local function player_update(player, world, dt)
             if not in_furniture and in_room then
                 player.pos.x = next_pos
                 player.flip_image = false
+                player.is_moving = true
             end
         end
         if input.keyHeld("s") then
@@ -84,6 +88,7 @@ local function player_update(player, world, dt)
             end
             if not in_furniture and in_room then
                 player.pos.y = next_pos
+                player.is_moving = true
             end
         end
         if input.keyHeld("d") then
@@ -101,6 +106,7 @@ local function player_update(player, world, dt)
             if not in_furniture and in_room then
                 player.pos.x = next_pos
                 player.flip_image = true
+                player.is_moving = true
             end
         end
 
@@ -134,8 +140,15 @@ local function player_draw(player)
     end
 
     -- Check if player flipped
-    love.graphics.draw(player.image, player.pos.x, player.pos.y - 10, 0, flip_x, 1,
+    local image = player.image
+    if player.is_moving then
+        love.graphics.draw(player.walk_images[math.floor(((love.timer.getTime() * 15) % 4) + 1)], player.pos.x, player.pos.y - 10, 0, flip_x, 1,
         player.image:getWidth() / 2, player.image:getHeight() / 2)
+    else
+        love.graphics.draw(player.image, player.pos.x, player.pos.y - 10, 0, flip_x, 1,
+        player.image:getWidth() / 2, player.image:getHeight() / 2)
+    end
+    
 
     if player.held_item ~= nil then
         love.graphics.draw(player.held_item.image, player.pos.x, player.pos.y - 20, 0, flip_x, 1, player.held_item.image:getWidth() / 2,
@@ -152,11 +165,18 @@ local function player_new()
         pos = vec2.new(215, 300),
         speed = 100,
         image = love.graphics.newImage("assets/player/hooky.png"),
+        walk_images = {
+            love.graphics.newImage("assets/player/hooky2.png"),
+            love.graphics.newImage("assets/player/hooky3.png"),
+            love.graphics.newImage("assets/player/hooky4.png"),
+            love.graphics.newImage("assets/player/hooky5.png"),
+        },
         flip_image = false,
         held_item = nil,
         update = player_update,
         draw = player_draw,
         hold_item = player_hold_item,
+        is_moving = false,
         
     }
 end
