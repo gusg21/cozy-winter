@@ -264,7 +264,7 @@ local function room_draw(room, world)
         end
 
         -- TODO: Make hovered objects brighter with shader
-        if furniture.can_interact and input.mouseInCollider(furniture.colliders) then
+        if furniture.can_interact and input.mouseInCollider(furniture.colliders) and not furniture.hidden then
             furniture_hovered = true
             love.mouse.setCursor(love.mouse.getSystemCursor("hand"))
             love.graphics.setColor(0.8, 0.8, 0.8)

@@ -43,26 +43,34 @@ return {
             y = -36,
             colliders = { 322, 312, 332, 248, 450, 260, 448, 324 },
             on_clicked = function(world, furn)
+                local cough = love.audio.newSource("assets/audio/sfx/smoochusGross04.mp3", "static")
+                local hooray = love.audio.newSource("assets/audio/sfx/smoochusHappy.mp3", "static")
+
                 -- give items to Smoochus
                 if not world.player.held_item and world.task_num ~= 3 then
+                    cough:play()
                     return
                 end
 
                 if world.task_num == 3 then
                     world.complete = true
                     furn.image = love.graphics.newImage("assets/furniture/bunk_bed_both.png")
+                    hooray:play()
                     return
                 end
 
                 if world.player.held_item.furniture.name == "blankets" and world.task_num == 0 then
                     world.task_num = world.task_num + 1
                     world.player.held_item = nil
+                    hooray:play()
                 elseif world.player.held_item.furniture.name == "hot choco" and world.task_num == 1 then
                     world.task_num = world.task_num + 1
                     world.player.held_item = nil
+                    hooray:play()
                 elseif world.player.held_item.furniture.name == "game console" and world.task_num == 2 then
                     world.task_num = world.task_num + 1
                     world.player.held_item = nil
+                    hooray:play()
                 end
             end,
             ui_bg = love.graphics.newImage("assets/ui/ui_bg.png"),
@@ -94,6 +102,7 @@ return {
             cx = 12,
             cy = 99,
             always = "behind",
+            click_sound = "none",
         },
         {
             name = "cat bed",
@@ -131,14 +140,17 @@ return {
             y = -15,
             colliders = { 421, 339, 474, 366, 474, 312, 423, 284 },
             trigger = true,
+            can_interact = true,
             on_clicked = function(world, furn)
                 print("BLANKY")
-                furn.hidden = true
-                if world.player.held_item == nil then
-                    world.player:hold_item({
-                        image = love.graphics.newImage("assets/furniture/folded_blankets.png"),
-                        furniture = furn,
-                    })
+                if world.task_num == 0 then
+                    if world.player.held_item == nil then
+                        furn.hidden = true
+                        world.player:hold_item({
+                            image = love.graphics.newImage("assets/furniture/folded_blankets.png"),
+                            furniture = furn,
+                        })
+                    end
                 end
             end,
             cx = 26,
@@ -183,9 +195,9 @@ return {
             colliders = { 322, 250, 326, 217, 352, 219, 351, 260 },
             on_clicked = function(world, furn)
                 -- pick up mug
-                furn.hidden = true
                 if world.task_num == 1 then
                     if world.player.held_item == nil then
+                        furn.hidden = true
                         world.player:hold_item({
                             image = love.graphics.newImage("assets/furniture/empty_mug.png"),
                             furniture = furn,
@@ -193,9 +205,11 @@ return {
                     end
                 end
             end,
+            can_interact = true,
             trigger = true,
             cx = 10,
-            cy = 94
+            cy = 94,
+            click_sound = love.audio.newSource("assets/audio/sfx/mugGet.mp3", "static")
         },
         {
             name = "couch",
@@ -333,6 +347,7 @@ return {
             can_interact = true,
             hidden = true,
             colliders = { 139, 292, 176, 291, 176, 327, 139, 328 },
+            click_sound = love.audio.newSource("assets/audio/sfx/hotChocolatePour.mp3", "static")
         },
         {
             name = "kettle",
@@ -372,6 +387,7 @@ return {
             trigger = true,
             can_interact = true,
             colliders = { 109, 292, 136, 291, 146, 327, 105, 328 },
+            click_sound = love.audio.newSource("assets/audio/sfx/hotChocolatePour.mp3", "static"),
         },
         {
             name = "oven",
@@ -461,7 +477,8 @@ return {
                         furniture = furn,
                     })
                 end
-            end
+            end,
+            click_sound = love.audio.newSource("assets/audio/sfx/cartridgeGet.mp3", "static")
         },
         {
             name = "pool table",

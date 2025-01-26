@@ -125,6 +125,28 @@ local function player_update(player, world, dt)
         in_furniture = false
     end
 
+    local time = 0.2
+    if player.is_moving and not player.was_moving then
+        local sound = player.step_sounds[love.math.random(1, 7)]
+        sound:setVolume(0.2)
+        sound:play()
+        player.walk_sound_counter = time
+    end
+
+    if player.is_moving then
+        player.walk_sound_counter = player.walk_sound_counter - dt
+        if player.walk_sound_counter <= 0 then
+            local sound = player.step_sounds[love.math.random(1, 7)]
+            sound:setVolume(0.1)
+            sound:play()
+            player.walk_sound_counter = time
+        end
+    end
+
+    if not player.is_moving then
+        player.walk_sound_counter = 0
+    end
+
     -- Clicking on colliders
     if input.mouseReleased(1) then
         local x, y = love.mouse.getPosition()
@@ -138,17 +160,27 @@ local function player_update(player, world, dt)
                 if mouX and mouY and pointInConvexPolygon(x, y, furniture.colliders) then
                     if furniture.on_clicked ~= nil and iscloseenough then
                         local uiclick = base_click_sound
+                        local nothing = false
                         if furniture.click_sound then
-                            uiclick = furniture.click_sound
+                            if furniture.click_sound ~= "none" then
+                                uiclick = furniture.click_sound
+                            else
+                                nothing = true
+                            end
                         end
-                        uiclick:setPitch(math.random() * 0.5 + 0.8)
-                        love.audio.play(uiclick)
+                        if not nothing then
+                            uiclick:setPitch(math.random() * 0.5 + 0.8)
+                            love.audio.play(uiclick)
+                        end
                         furniture.on_clicked(world, furniture)
+                        break
                     end
                 end
             end
         end
     end
+
+    player.was_moving = player.is_moving
 end
 
 local function player_draw(player)
@@ -191,13 +223,23 @@ local function player_new()
             love.graphics.newImage("assets/player/hooky4.png"),
             love.graphics.newImage("assets/player/hooky5.png"),
         },
+        step_sounds = {
+            love.audio.newSource("assets/audio/sfx/footStep01.wav", "static"),
+            love.audio.newSource("assets/audio/sfx/footStep02.wav", "static"),
+            love.audio.newSource("assets/audio/sfx/footStep03.wav", "static"),
+            love.audio.newSource("assets/audio/sfx/footStep04.wav", "static"),
+            love.audio.newSource("assets/audio/sfx/footStep05.wav", "static"),
+            love.audio.newSource("assets/audio/sfx/footStep06.wav", "static"),
+            love.audio.newSource("assets/audio/sfx/footStep07.wav", "static"),
+        },
         flip_image = false,
         held_item = nil,
         update = player_update,
         draw = player_draw,
         hold_item = player_hold_item,
         is_moving = false,
-
+        walk_sound_counter = 0,
+        was_moving = false
     }
 end
 

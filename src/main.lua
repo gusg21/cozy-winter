@@ -80,6 +80,9 @@ function love.load()
 
     -- Create snowflakes
     reset_snowflakes()
+
+    local start_sound = love.audio.newSource("assets/audio/sfx/gameStart.mp3", "static")
+    start_sound:play()
 end
 
 function love.resized()
