@@ -113,10 +113,10 @@ local function player_update(player, world, dt)
         local mouX = x ~= nil
         local mouY = y ~= nil
         for i, furniture in ipairs(world.currentRoom.furniture) do
-            if furniture.colliders ~= nil then
+            if furniture.colliders ~= nil and not furniture.hidden then
                 if mouX and mouY and pointInConvexPolygon(x, y, furniture.colliders) then
                     if furniture.on_clicked ~= nil then
-                        furniture.on_clicked(world)
+                        furniture.on_clicked(world, furniture)
                     end
                 end
             end
@@ -125,14 +125,23 @@ local function player_update(player, world, dt)
 end
 
 local function player_draw(player)
-    -- Check if player flipped
+    local flip_x = 1
     if player.flip_image then
-        love.graphics.draw(player.image, player.pos.x, player.pos.y, 0, -1, 1,
-            player.image:getWidth() / 2, player.image:getHeight() / 2)
-    else
-        love.graphics.draw(player.image, player.pos.x, player.pos.y, 0, 1, 1,
-            player.image:getWidth() / 2, player.image:getHeight() / 2)
+        flip_x = -1
     end
+
+    -- Check if player flipped
+    love.graphics.draw(player.image, player.pos.x, player.pos.y, 0, flip_x, 1,
+        player.image:getWidth() / 2, player.image:getHeight() / 2)
+
+    if player.held_item ~= nil then
+        love.graphics.draw(player.held_item.image, player.pos.x, player.pos.y - 20, 0, flip_x, 1, player.held_item.image:getWidth() / 2,
+            player.held_item.image:getHeight() / 2)
+    end
+end
+
+local function player_hold_item(player, item)
+    player.held_item = item
 end
 
 local function player_new()
@@ -144,6 +153,8 @@ local function player_new()
         held_item = nil,
         update = player_update,
         draw = player_draw,
+        hold_item = player_hold_item,
+        
     }
 end
 

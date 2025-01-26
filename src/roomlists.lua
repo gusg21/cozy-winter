@@ -41,9 +41,41 @@ return {
             x = 72,
             y = -36,
             colliders = { 322, 312, 332, 248, 450, 260, 448, 324 },
-            on_clicked = function(world)
+            on_clicked = function(world, furn)
                 -- give items to Smoochus
+                if not world.player.held_item then
+                    return
+                end
+
+                if world.player.held_item.furniture.name == "blankets" and world.task_num == 0 then
+                    world.task_num = world.task_num + 1
+                    world.player.held_item = nil
+                elseif world.player.held_item.furniture.name == "hot choco" and world.task_num == 1 then
+                    world.task_num = world.task_num + 1
+                    world.player.held_item = nil
+                elseif world.player.held_item.furniture.name == "game console" and world.task_num == 2 then
+                    world.task_num = world.task_num + 1
+                    world.player.held_item = nil
+                end
             end,
+            ui_bg = love.graphics.newImage("assets/ui/ui_bg.png"),
+            blankets_image = love.graphics.newImage("assets/furniture/folded_blankets.png"),
+            hot_choco_image = love.graphics.newImage("assets/furniture/hot_chocolate.png"),
+            game_console_image = love.graphics.newImage("assets/furniture/game_console.png"),
+            custom_draw = function(world, furn, x, y)
+                local xx = x + 15
+                local yy = y - 77 + (math.sin(love.timer.getTime()) * 4.0)
+                love.graphics.draw(furn.ui_bg, xx, yy)
+                if world.task_num == 0 then
+                    love.graphics.draw(furn.blankets_image, xx + 10, yy + 2)
+                end
+                if world.task_num == 1 then
+                    love.graphics.draw(furn.hot_choco_image, xx + 10, yy + 2)
+                end
+                if world.task_num == 2 then
+                    love.graphics.draw(furn.game_console_image, xx + 10, yy + 2)
+                end
+             end,
             can_interact = true,
             trigger = true,
             cx = 12,
@@ -79,6 +111,26 @@ return {
     },
     livingroom = {
         {
+            name = "blankets",
+            image = love.graphics.newImage("assets/furniture/blanket.png"),
+            x = 41,
+            y = -15,
+            colliders = { 421, 339, 474, 366, 474, 312, 423, 284 },
+            trigger = true,
+            on_clicked = function(world, furn)
+                print("BLANKY")
+                furn.hidden = true
+                if world.player.held_item == nil then
+                    world.player:hold_item({
+                        image = love.graphics.newImage("assets/furniture/folded_blankets.png"),
+                        furniture = furn,
+                    })
+                end
+            end,
+            cx = 26,
+            cy = 58
+        },
+        {
             name = "grandfather clock",
             image = love.graphics.newImage("assets/furniture/grandfather_clock.png"),
             x = -64,
@@ -104,12 +156,31 @@ return {
             x = -84,
             y = -143,
             colliders = { 312, 300, 362, 272, 402, 294, 348, 320 },
-            on_clicked = function(world)
-                -- pick up mug
-            end,
             trigger = false,
             cx = 16,
             cy = 141
+        },
+        {
+            name = "mug",
+            image = love.graphics.newImage("assets/furniture/empty_mug.png"),
+            x = -58,
+            y = -86,
+            colliders = { 322, 250, 326, 217, 352, 219, 351, 260 },
+            on_clicked = function(world, furn)
+                -- pick up mug
+                furn.hidden = true
+                if world.task_num == 1 then
+                    if world.player.held_item == nil then
+                        world.player:hold_item({
+                            image = love.graphics.newImage("assets/furniture/empty_mug.png"),
+                            furniture = furn,
+                        })
+                    end
+                end
+            end,
+            trigger = true,
+            cx = 10,
+            cy = 94
         },
         {
             name = "couch",
@@ -127,7 +198,7 @@ return {
             x = -24,
             y = -52,
             colliders = { 410, 92, 452, 114, 452, 221, 410, 200 },
-            on_clicked = function(world)
+            on_clicked = function(world, furn)
                 swap_room(world, world.bedroom, 160, 361)
             end,
             can_interact = true,
@@ -138,8 +209,8 @@ return {
             x = -24,
             y = -52,
             colliders = { 638, 206, 676, 224, 676, 334, 638, 314 },
-            on_clicked = function(world)
-                swap_room(world, world.bedroom, 215, 300)
+            on_clicked = function(world, furn)
+                swap_room(world, world.game_room, 215, 300)
             end,
             can_interact = true,
             trigger = true,
@@ -183,7 +254,7 @@ return {
             x = -324,
             y = -32,
             colliders = { 56, 272, 56, 384, 104, 408, 104, 296 },
-            on_clicked = function(world)
+            on_clicked = function(world, furn)
                 swap_room(world, world.kitchen, 460, 300)
             end,
             can_interact = true,
@@ -201,7 +272,7 @@ return {
             x = -24,
             y = -52,
             colliders = { 425, 202, 466, 181, 466, 287, 425, 308 },
-            on_clicked = function(world)
+            on_clicked = function(world, furn)
                 swap_room(world, world.livingroom, 100, 375)
             end,
             can_interact = true,
@@ -220,6 +291,68 @@ return {
             x = -338,
             y = -10,
             always = "behind",
+        },
+        {
+            name = "hot choco",
+            image = love.graphics.newImage("assets/furniture/hot_chocolate.png"),
+            x = -262,
+            y = 9,
+            cx = 13,
+            cy = 20,
+            on_clicked = function (world, furn)
+                furn.hidden = true
+                if world.player.held_item == nil then
+                    world.player:hold_item({
+                        image = love.graphics.newImage("assets/furniture/hot_chocolate.png"),
+                        furniture = furn,
+                    })
+                end
+            end,
+            custom_draw = function (world, furn, x, y)
+            end,
+            trigger = true,
+            can_interact = true,
+            hidden = true,
+            colliders = { 139, 292, 176, 291, 176, 327, 139, 328 },
+        },
+        {
+            name = "kettle",
+            image = love.graphics.newImage("assets/furniture/kettle.png"),
+            x = -292,
+            y = 19,
+            cx = 13,
+            cy = 20,
+            start_time = 0,
+            started = false,
+            font = love.graphics.newFont("assets/elliott.ttf", 32),
+            on_clicked = function (world, furn)
+                if not world.player.held_item then
+                    return
+                end
+                if world.player.held_item.furniture.name == "mug" then
+                    furn.x = -327
+                    furn.y = 53
+                    furn.colliders = { 69, 332, 104, 331, 106, 367, 74, 368 }
+                    furn.started = true
+                    furn.start_time = love.timer.getTime()
+                    world.player.held_item = nil
+                end
+            end,
+            custom_draw = function (world, furn, x, y)
+                if furn.started then
+                    local seconds = 5 - (love.timer.getTime() - furn.start_time)
+                    if seconds < 0 then
+                        seconds = 0
+                        furn.hidden = true
+                        world.find_furn("hot choco").hidden = false
+                    end
+                    local time_text = love.graphics.newText(furn.font, string.format("%d:%.2d", math.floor(seconds / 60), seconds % 60))
+                    love.graphics.draw(time_text, x - time_text:getWidth() / 2, y - time_text:getHeight() - 30)
+                end
+            end,
+            trigger = true,
+            can_interact = true,
+            colliders = { 109, 292, 136, 291, 146, 327, 105, 328 },
         },
         {
             name = "oven",
@@ -257,4 +390,10 @@ return {
     kitchen_floorcolliders = {
         172, 432, 576, 232, 746, 318, 340, 518
     },
+    game_room = {
+        
+    },
+    game_room_floor_colliders = {
+        172, 432, 576, 232, 746, 318, 340, 518
+    }
 }

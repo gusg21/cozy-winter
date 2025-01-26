@@ -27,12 +27,26 @@ function love.load()
     world.bedroom = room_new("assets/bgs/bed_room.png", roomlist.bedroom, roomlist.bedroom_floorcolliders)
     world.livingroom = room_new("assets/bgs/living_room.png", roomlist.livingroom, roomlist.livingroom_floorcolliders)
     world.kitchen = room_new("assets/bgs/kitchen.png", roomlist.kitchen, roomlist.kitchen_floorcolliders)
+    world.game_room = room_new("assets/bgs/game_room.png", roomlist.game_room, roomlist.game_room_floor_colliders);
 
     -- Init player
     world.player = player_new()
 
     -- Set starting room
     world.currentRoom = world.bedroom
+    
+    -- Tasks
+    world.task_num = 0
+
+    -- Helper
+    world.find_furn = function(furn_name)
+        for key, furn in pairs(world.currentRoom.furniture) do
+            if furn.name == furn_name then
+                return furn
+            end
+        end
+        return nil
+    end
 
     -- Size window to starting room image
     love.window.setMode(world.currentRoom.bg:getWidth(), world.currentRoom.bg:getHeight())

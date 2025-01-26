@@ -270,14 +270,20 @@ local function room_draw(room, world)
             love.graphics.setColor(0.8, 0.8, 0.8)
         end
 
-        if furniture.image ~= nil then
+        if not furniture.hidden or world.currentRoom.editing then
             local fx, fy = get_furniture_screen_pos(furniture, room)
             local fcx, fcy = get_furniture_screen_center(furniture, room)
-            love.graphics.setColor(1, 1, 1, 1)
-            love.graphics.draw(furniture.image, fx, fy)
-            if room.editing then
-                love.graphics.setColor(0.2, 0.9, 0.8, 1)
-                love.graphics.circle("fill", fcx, fcy, 5)
+            if furniture.image ~= nil then
+                love.graphics.setColor(1, 1, 1, 1)
+                love.graphics.draw(furniture.image, fx, fy)
+                if room.editing then
+                    love.graphics.setColor(0.2, 0.9, 0.8, 1)
+                    love.graphics.circle("fill", fcx, fcy, 5)
+                end
+            end
+
+            if furniture.custom_draw then
+                furniture.custom_draw(world, furniture, fcx, fcy)
             end
         end
 
