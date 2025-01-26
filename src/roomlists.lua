@@ -72,8 +72,6 @@ return {
             trigger = true,
             always = "infront"
         },
-
-        -- TODO: FIX POS IN PLAYER, MAKE ALL COLLIDERS
     },
     bedroom_floorcolliders =
     {
@@ -186,7 +184,7 @@ return {
             y = -32,
             colliders = { 56, 272, 56, 384, 104, 408, 104, 296 },
             on_clicked = function(world)
-                swap_room(world, world.bedroom, 215, 300)
+                swap_room(world, world.kitchen, 460, 300)
             end,
             can_interact = true,
             trigger = true,
@@ -196,5 +194,67 @@ return {
     livingroom_floorcolliders =
     {
         32, 344, 364, 178, 732, 362, 398, 526
+    },
+    kitchen = {
+        {
+            name = "living room door",
+            x = -24,
+            y = -52,
+            colliders = { 425, 202, 466, 181, 466, 287, 425, 308 },
+            on_clicked = function(world)
+                swap_room(world, world.livingroom, 100, 375)
+            end,
+            can_interact = true,
+            trigger = true,
+        },
+        {
+            name = "fridge",
+            image = love.graphics.newImage("assets/furniture/fridge.png"),
+            x = -240,
+            y = -96,
+            always = "behind",
+        },
+        {
+            name = "counter",
+            image = love.graphics.newImage("assets/furniture/countertop_in_real.png"),
+            x = -338,
+            y = -10,
+            always = "behind",
+        },
+        {
+            name = "oven",
+            image = love.graphics.newImage("assets/furniture/oven.png"),
+            x = -390,
+            y = 18,
+            always = "behind",
+        },
+        {
+            name = "island",
+            image = love.graphics.newImage("assets/furniture/countertop.png"),
+            x = -220,
+            y = 10,
+        },
+        {
+            name = "clock",
+            image = love.graphics.newImage("assets/furniture/kitchen_clock.png"),
+            x = -70,
+            y = -120,
+        },
+        {
+            name = "wine",
+            image = love.graphics.newImage("assets/furniture/wine.png"),
+            x = -90,
+            y = -80,
+        },
+        {
+            name = "table",
+            image = love.graphics.newImage("assets/furniture/table.png"),
+            x = 12,
+            y = -40,
+        },
+    },
+    -- TODO: multiple colliders to move all across kitchen
+    kitchen_floorcolliders = {
+        172, 432, 576, 232, 746, 318, 340, 518
     },
 }

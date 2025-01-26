@@ -224,7 +224,7 @@ local function get_furniture_screen_center(furniture, room)
     return furniture.x + (room.bg:getWidth() / 2) + cx, furniture.y + (room.bg:getHeight() / 2) + cy
 end
 
-local function room_draw(room, world) -- TODO: Some things need to always render in front and behind
+local function room_draw(room, world)
     -- Draw background
     love.graphics.draw(room.bg, 0, 0)
 

@@ -30,7 +30,7 @@ local function pointInConvexPolygon(x, y, poly)
     return true
 end
 
-local function player_update(player, world, dt) -- TODO: Bugfix collider code
+local function player_update(player, world, dt)
     -- Do WASD movement
     if not world.currentRoom.editing then
         local in_room = true
@@ -107,6 +107,7 @@ local function player_update(player, world, dt) -- TODO: Bugfix collider code
     end
 
     -- Clicking on colliders
+    -- TODO: proximity based clicking
     if input.mouseReleased(1) then
         local x, y = love.mouse.getPosition()
         local mouX = x ~= nil

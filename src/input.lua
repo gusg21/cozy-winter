@@ -3,7 +3,6 @@ local mouse_down_this_frame = false
 local mouse_released_this_frame = false
 
 local function pointInConvexPolygon(x, y, poly)
-	-- poly as {x1,y1, x2,y2, x3,y3, ...}
 	local imax = #poly
 
 	local function isVerticesClockwise(poly)

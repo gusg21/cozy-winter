@@ -5,7 +5,7 @@ local roomlist = require("roomlists")
 local input = require("input")
 
 local player
-local bedroom, livingroom
+local bedroom, livingroom, kitchen
 
 local world = {
     currentRoom = nil,
@@ -20,11 +20,13 @@ function love.load()
     -- Add objects to world
     table.insert(world, bedroom)
     table.insert(world, livingroom)
+    table.insert(world, kitchen)
     table.insert(world, player)
 
     -- Init rooms
     world.bedroom = room_new("assets/bgs/bed_room.png", roomlist.bedroom, roomlist.bedroom_floorcolliders)
     world.livingroom = room_new("assets/bgs/living_room.png", roomlist.livingroom, roomlist.livingroom_floorcolliders)
+    world.kitchen = room_new("assets/bgs/kitchen.png", roomlist.kitchen, roomlist.kitchen_floorcolliders)
 
     -- Init player
     world.player = player_new()
@@ -38,7 +40,6 @@ end
 
 function love.update(dt)
     world.currentRoom:update(world, dt)
-
     input.reset()
 end
 
