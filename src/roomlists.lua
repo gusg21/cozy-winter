@@ -5,6 +5,7 @@ local function swap_room(world, newroom, sx, sy)
     world.player.pos.y = sy
     love.window.setMode(world.currentRoom.bg:getWidth(), world.currentRoom.bg:getHeight())
     input.reset()
+    reset_snowflakes()
 end
 
 return {

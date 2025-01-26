@@ -18,10 +18,25 @@ local fade_out_factor = 0
 local has_resized_for_outro = false
 local outro_font = love.graphics.newFont("assets/elliott.ttf", 32)
 
+local snowflakes = {}
+
+function reset_snowflakes()
+    snowflakes = {}
+    for i = 1, 100, 1 do
+        table.insert(snowflakes, {
+            x = love.math.random(0, world.currentRoom.bg:getWidth()),
+            y = love.math.random(0, world.currentRoom.bg:getHeight()),
+            xvel = (math.random() - 0.5) * 100,
+            xaccel = (math.random() - 0.5) * 100,
+            yvel = math.random(15, 50)
+        })
+    end
+end
+
 function love.load()
     -- Window setup
     love.window.setTitle("Hooky and Smoochus <3")
-    love.graphics.setBackgroundColor(0.91, 0.62, 0.72)
+    love.graphics.setBackgroundColor(0.67, 0.62, 0.91)
     love.window.setVSync(1)
     bgtrack = love.audio.newSource("assets/audio/music/CARE.mp3", "static")
     ambience = love.audio.newSource("assets/audio/music/PATIENCE.mp3", "static")
@@ -62,6 +77,13 @@ function love.load()
 
     -- Size window to starting room image
     love.window.setMode(world.currentRoom.bg:getWidth(), world.currentRoom.bg:getHeight())
+
+    -- Create snowflakes
+    reset_snowflakes()
+end
+
+function love.resized()
+    reset_snowflakes()
 end
 
 function love.update(dt)
@@ -79,9 +101,30 @@ function love.update(dt)
         fade_out_factor = fade_out_factor + dt
     end
     input.reset()
+
+    for index, flake in ipairs(snowflakes) do
+        flake.xaccel = flake.xaccel + (math.random() - 0.5) * 1000
+        flake.xaccel = math.max(-1000, math.min(flake.xaccel, 1000))
+        flake.xvel = flake.xvel + flake.xaccel * dt * dt
+        flake.x = flake.x + flake.xvel * dt
+        flake.y = flake.y + dt * flake.yvel
+
+        if flake.y > love.graphics.getHeight() + 20 or flake.x < -100 or flake.x > love.graphics.getWidth() then
+            flake.y = -20
+            flake.x = math.random() * love.graphics.getWidth()
+            flake.xvel = (math.random() - 0.5) * 100
+            flake.xaccel = (math.random() - 0.5) * 100
+            flake.yvel = math.random(15, 50)
+        end
+    end
 end
 
 function love.draw()
+    for index, flake in ipairs(snowflakes) do
+        love.graphics.setColor(0.8, 0.8, 0.83, 1)
+        love.graphics.rectangle("fill", flake.x, flake.y, 5, 5)
+    end
+
     world.currentRoom:draw(world)
 
     love.graphics.setColor(20/255, 16/255, 19/255, math.min(fade_out_factor / 3, 1))
