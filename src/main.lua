@@ -13,6 +13,8 @@ local world = {
 function love.load()
     -- Window setup
     love.window.setTitle("Hooky and Smoochus <3")
+    love.graphics.setBackgroundColor(0.91, 0.62, 0.72)
+    love.window.setVSync(1)
 
     -- Add objects to world
     table.insert(world, bedroom)
