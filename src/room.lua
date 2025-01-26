@@ -76,7 +76,7 @@ local function room_update(room, world, dt)
         if input.keyOnce("s") then
             if edit_floor then
                 if room.cindex == 1 then
-                    room.cindex = #room.floorcols
+                    room.cindex = #room.floorcols[1]
                 else
                     room.cindex = room.cindex - 1
                 end
@@ -91,7 +91,7 @@ local function room_update(room, world, dt)
 
         if input.keyOnce("w") then
             if edit_floor then
-                if room.cindex == #room.floorcols then
+                if room.cindex == #room.floorcols[1] then
                     room.cindex = 1
                 else
                     room.cindex = room.cindex + 1
@@ -140,7 +140,7 @@ local function room_update(room, world, dt)
                     end
                 else
                     if room.cindex % 2 ~= 0 then
-                        room.floorcols[room.cindex] = room.floorcols[room.cindex] + 1 + shift_down
+                        room.floorcols[1][room.cindex] = room.floorcols[1][room.cindex] + 1 + shift_down
                     else
                         room.floorcols[room.cindex] = room.floorcols[room.cindex] - 1 - shift_down
                     end
@@ -318,7 +318,7 @@ local function room_draw(room, world)
         if editing_col and edit_floor then
             love.graphics.setColor(0, 1, 0)
 
-            love.graphics.polygon("line", room.floorcols)
+            love.graphics.polygon("line", room.floorcols[1])
         end
 
         -- Draw editing text
