@@ -128,10 +128,13 @@ local function player_update(player, world, dt)
         local x, y = love.mouse.getPosition()
         local mouX = x ~= nil
         local mouY = y ~= nil
+
+        local mouseVec = vec2.new(x, y)
+        local iscloseenough = vec2.dist(mouseVec, player.pos) < 100
         for i, furniture in ipairs(world.currentRoom.furniture) do
             if furniture.colliders ~= nil and not furniture.hidden then
                 if mouX and mouY and pointInConvexPolygon(x, y, furniture.colliders) then
-                    if furniture.on_clicked ~= nil then
+                    if furniture.on_clicked ~= nil and iscloseenough then
                         local uiclick = love.audio.newSource("assets/audio/sfx/UIClick.mp3", "static")
                         love.audio.play(uiclick)
                         furniture.on_clicked(world, furniture)
