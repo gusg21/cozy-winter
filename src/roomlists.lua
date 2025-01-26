@@ -127,6 +127,54 @@ return {
             always = "infront",
             click_sound = love.audio.newSource("assets/audio/sfx/doorTransition.mp3", "static"),
         },
+        {
+            name = "ball1",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball1.png"),
+            x = 54,
+            y = 27,
+            colliders = { 293, 266, 321, 271, 314, 288, 288, 285 },
+            on_clicked = function(world, furn)
+                furn.hidden = true
+                -- collect
+            end,
+            can_interact = false,
+            trigger = true,
+            hidden = false,
+            cx = 0,
+            cy = 0
+        },
+        {
+            name = "ball2",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball2.png"),
+            x = 51,
+            y = 122,
+            colliders = { 292, 355, 313, 363, 311, 386, 292, 388 },
+            on_clicked = function(world, furn)
+                furn.hidden = true
+                -- collect
+            end,
+            can_interact = false,
+            trigger = true,
+            hidden = false,
+            cx = 0,
+            cy = 0
+        },
+        {
+            name = "ball3",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball3.png"),
+            x = -200,
+            y = 82,
+            colliders = { 37, 315, 62, 316, 58, 348, 38, 345 },
+            on_clicked = function(world, furn)
+                furn.hidden = true
+                -- collect
+            end,
+            can_interact = false,
+            trigger = true,
+            hidden = false,
+            cx = 0,
+            cy = 0
+        },
     },
     bedroom_floorcolliders =
     {
@@ -292,6 +340,102 @@ return {
             trigger = true,
             always = "infront",
             click_sound = love.audio.newSource("assets/audio/sfx/doorTransition.mp3", "static"),
+        },
+        {
+            name = "ball4",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball4.png"),
+            x = -254,
+            y = -70,
+            colliders = { 113, 226, 141, 221, 144, 248, 118, 245 },
+            on_clicked = function(world, furn)
+                furn.hidden = true
+                -- collect
+            end,
+            can_interact = false,
+            trigger = true,
+            hidden = false,
+            cx = 0,
+            cy = 0
+        },
+        {
+            name = "ball5",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball5.png"),
+            x = -20,
+            y = 204,
+            colliders = { 352, 495, 383, 493, 381, 526, 342, 518 },
+            on_clicked = function(world, furn)
+                furn.hidden = true
+                -- collect
+            end,
+            can_interact = false,
+            trigger = true,
+            hidden = false,
+            cx = 0,
+            cy = 0
+        },
+        {
+            name = "ball6",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball6.png"),
+            x = 200,
+            y = -6,
+            colliders = { 557, 292, 592, 289, 591, 312, 578, 312 },
+            on_clicked = function(world, furn)
+                furn.hidden = true
+                -- collect
+            end,
+            can_interact = false,
+            trigger = true,
+            hidden = false,
+            cx = 0,
+            cy = 0
+        },
+        {
+            name = "ball7",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball7.png"),
+            x = 133,
+            y = 80,
+            colliders = { 503, 366, 525, 366, 524, 392, 504, 385 },
+            on_clicked = function(world, furn)
+                furn.hidden = true
+                -- collect
+            end,
+            can_interact = false,
+            trigger = true,
+            hidden = false,
+            cx = 0,
+            cy = 0
+        },
+        {
+            name = "ball8",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball8.png"),
+            x = -40,
+            y = -10,
+            colliders = { 332, 275, 353, 293, 351, 306, 332, 308 },
+            on_clicked = function(world, furn)
+                furn.hidden = true
+                -- collect
+            end,
+            can_interact = false,
+            trigger = true,
+            hidden = false,
+            cx = 0,
+            cy = 0
+        },
+        {
+            name = "ball9",
+            image = love.graphics.newImage("assets/furniture/pool_balls/ball9.png"),
+            x = 366,
+            y = 70,
+            colliders = { 737, 365, 762, 366, 757, 390, 738, 395 },
+            on_clicked = function(world, furn)
+                furn.hidden = true
+                -- collect
+            end,
+            can_interact = false,
+            trigger = true,
+            hidden = false,
+            cx = 0,
+            cy = 0
         },
     },
     livingroom_floorcolliders =
