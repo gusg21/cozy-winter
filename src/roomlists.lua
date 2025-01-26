@@ -379,24 +379,36 @@ return {
             image = love.graphics.newImage("assets/furniture/countertop.png"),
             x = -220,
             y = 10,
+            trigger = false,
+            can_interact = false,
+            colliders = { 209, 433, 269, 400, 410, 469, 346, 499 },
+            cx = 30,
+            cy = 142,
         },
         {
             name = "clock",
             image = love.graphics.newImage("assets/furniture/kitchen_clock.png"),
             x = -70,
             y = -120,
+            always = "behind"
         },
         {
             name = "wine",
             image = love.graphics.newImage("assets/furniture/wine.png"),
             x = -90,
             y = -80,
+            always = "behind"
         },
         {
             name = "table",
             image = love.graphics.newImage("assets/furniture/table.png"),
             x = 12,
             y = -40,
+            trigger = false,
+            can_interact = false,
+            colliders = { 458, 357, 594, 290, 645, 314, 519, 383 },
+            cx = 78,
+            cy = 98,
         },
     },
     -- TODO: multiple colliders to move all across kitchen
