@@ -1,5 +1,6 @@
 local key_down_this_frame = false
 local mouse_down_this_frame = false
+local mouse_released_this_frame = false
 
 local function pointInConvexPolygon(x, y, poly)
 	-- poly as {x1,y1, x2,y2, x3,y3, ...}
@@ -57,18 +58,16 @@ local function input_mouse_held(button)
 end
 
 local function input_mouse_once(button)
-    
-    print(love.mouse.isDown(button), mouse_down_this_frame)
-    if love.mouse.isDown(button) and not mouse_down_this_frame then
-        mouse_down_this_frame = true
-        return true
-    else
-        return false
-    end
+    return mouse_down_this_frame
 end
 
 local function input_mouse_reset()
     mouse_down_this_frame = false
+    mouse_released_this_frame = false
+end
+
+local function input_mouse_released(btn)
+    return mouse_released_this_frame
 end
 
 local function input_mouse_in_collider(col)
@@ -79,8 +78,14 @@ love.keyreleased = function()
     key_down_this_frame = false
 end
 
+love.mousepressed = function()
+    mouse_down_this_frame = true
+end
+
 love.mousereleased = function()
+    print("RELEASED")
     mouse_down_this_frame = false
+    mouse_released_this_frame = true
 end
 
 return {
@@ -89,5 +94,6 @@ return {
     mouseHeld = input_mouse_held,
     mouseOnce = input_mouse_once,
     mouseInCollider = input_mouse_in_collider,
-    reset = input_mouse_reset
+    reset = input_mouse_reset,
+    mouseReleased = input_mouse_released,
 }

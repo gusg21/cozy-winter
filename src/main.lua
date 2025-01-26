@@ -2,6 +2,7 @@ local push = require("push")
 local player_new = require("player")
 local room_new = require("room")
 local roomlist = require("roomlists")
+local input = require("input")
 
 local player
 local bedroom, livingroom
@@ -37,6 +38,8 @@ end
 
 function love.update(dt)
     world.currentRoom:update(world, dt)
+
+    input.reset()
 end
 
 function love.draw()

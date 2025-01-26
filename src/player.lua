@@ -107,7 +107,7 @@ local function player_update(player, world, dt) -- TODO: Bugfix collider code
     end
 
     -- Clicking on colliders
-    if input.mouseOnce(1) then
+    if input.mouseReleased(1) then
         local x, y = love.mouse.getPosition()
         local mouX = x ~= nil
         local mouY = y ~= nil
