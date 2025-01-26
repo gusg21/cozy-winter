@@ -37,6 +37,7 @@ function love.load()
     world.bedroom = room_new("assets/bgs/bed_room.png", roomlist.bedroom, roomlist.bedroom_floorcolliders)
     world.livingroom = room_new("assets/bgs/living_room.png", roomlist.livingroom, roomlist.livingroom_floorcolliders)
     world.kitchen = room_new("assets/bgs/kitchen.png", roomlist.kitchen, roomlist.kitchen_floorcolliders)
+    table.insert(world.kitchen.floorcols, roomlist.kitchen_floorcolliders2)
     world.game_room = room_new("assets/bgs/game_room.png", roomlist.game_room, roomlist.game_room_floor_colliders);
 
     -- Init player

@@ -37,7 +37,7 @@ local function player_update(player, world, dt)
 
     -- Do WASD movement
     if not world.currentRoom.editing then
-        local in_room = true
+        local in_room = false
         local in_furniture = false
         if input.keyHeld("w") then
             local next_pos = player.pos.y - (player.speed * dt)
@@ -48,8 +48,10 @@ local function player_update(player, world, dt)
                     end
                 end
             end
-            if not pointInConvexPolygon(player.pos.x, next_pos, world.currentRoom.floorcols) then
-                in_room = false
+            for i, coltable in world.currentRoom.floorcols do
+                if pointInConvexPolygon(player.pos.x, next_pos, coltable) then
+                    in_room = true
+                end
             end
             if not in_furniture and in_room then
                 player.pos.y = next_pos
@@ -65,9 +67,12 @@ local function player_update(player, world, dt)
                     end
                 end
             end
-            if not pointInConvexPolygon(next_pos, player.pos.y, world.currentRoom.floorcols) then
-                in_room = false
+            for i, coltable in world.currentRoom.floorcols do
+                if pointInConvexPolygon(next_pos, player.pos.y, coltable) then
+                    in_room = true
+                end
             end
+
             if not in_furniture and in_room then
                 player.pos.x = next_pos
                 player.flip_image = false
@@ -83,8 +88,10 @@ local function player_update(player, world, dt)
                     end
                 end
             end
-            if not pointInConvexPolygon(player.pos.x, next_pos, world.currentRoom.floorcols) then
-                in_room = false
+            for i, coltable in world.currentRoom.floorcols do
+                if pointInConvexPolygon(player.pos.x, next_pos, coltable) then
+                    in_room = true
+                end
             end
             if not in_furniture and in_room then
                 player.pos.y = next_pos
@@ -100,8 +107,10 @@ local function player_update(player, world, dt)
                     end
                 end
             end
-            if not pointInConvexPolygon(next_pos, player.pos.y, world.currentRoom.floorcols) then
-                in_room = false
+            for i, coltable in world.currentRoom.floorcols do
+                if pointInConvexPolygon(next_pos, player.pos.y, coltable) then
+                    in_room = true
+                end
             end
             if not in_furniture and in_room then
                 player.pos.x = next_pos

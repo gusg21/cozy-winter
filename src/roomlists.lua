@@ -402,6 +402,9 @@ return {
     kitchen_floorcolliders = {
         172, 432, 576, 232, 746, 318, 340, 518
     },
+    kitchen_floorcolliders2 = {
+        192, 440, 116, 400, 259, 328, 352, 376
+    },
     game_room = {
         {
             name = "living room door",

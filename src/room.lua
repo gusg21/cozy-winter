@@ -351,7 +351,9 @@ local function room_new(bgfilename, furniturelist, floorcolliders)
         bg = love.graphics.newImage(bgfilename),
         furniture = furniturelist,
         findex = 1,
-        floorcols = floorcolliders,
+        floorcols = {
+            floorcolliders,
+        },
         cindex = 1,
         camera = {
             x = 0,
