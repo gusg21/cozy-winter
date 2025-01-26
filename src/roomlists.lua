@@ -115,7 +115,8 @@ return {
             end,
             can_interact = true,
             trigger = true,
-            always = "infront"
+            always = "infront",
+            click_sound = love.audio.newSource("assets/audio/sfx/doorTransition.mp3", "static"),
         },
     },
     bedroom_floorcolliders =
@@ -141,7 +142,8 @@ return {
                 end
             end,
             cx = 26,
-            cy = 58
+            cy = 58,
+            click_sound = love.audio.newSource("assets/audio/sfx/blanketGet.mp3", "static"),
         },
         {
             name = "grandfather clock",
@@ -216,6 +218,7 @@ return {
             end,
             can_interact = true,
             trigger = true,
+            click_sound = love.audio.newSource("assets/audio/sfx/doorTransition.mp3", "static"),
         },
         {
             name = "gameroom door",
@@ -227,6 +230,7 @@ return {
             end,
             can_interact = true,
             trigger = true,
+            click_sound = love.audio.newSource("assets/audio/sfx/doorTransition.mp3", "static"),
         },
         {
             name = "plant",
@@ -272,7 +276,8 @@ return {
             end,
             can_interact = true,
             trigger = true,
-            always = "infront"
+            always = "infront",
+            click_sound = love.audio.newSource("assets/audio/sfx/doorTransition.mp3", "static"),
         },
     },
     livingroom_floorcolliders =
@@ -290,6 +295,7 @@ return {
             end,
             can_interact = true,
             trigger = true,
+            click_sound = love.audio.newSource("assets/audio/sfx/doorTransition.mp3", "static"),
         },
         {
             name = "fridge",
@@ -433,7 +439,8 @@ return {
             flip_h = true,
             always = "infront",
             cx = -1,
-            cy = 113
+            cy = 113,
+            click_sound = love.audio.newSource("assets/audio/sfx/doorTransition.mp3", "static"),
         },
         {
             name = "game console",

@@ -1,6 +1,8 @@
 local vec2 = require("cpml/vec2")
 local input = require("input")
 
+local base_click_sound = love.audio.newSource("assets/audio/sfx/UIClick.mp3", "static")
+
 local function pointInConvexPolygon(x, y, poly)
     local imax = #poly
 
@@ -132,7 +134,11 @@ local function player_update(player, world, dt)
             if furniture.colliders ~= nil and not furniture.hidden then
                 if mouX and mouY and pointInConvexPolygon(x, y, furniture.colliders) then
                     if furniture.on_clicked ~= nil then
-                        local uiclick = love.audio.newSource("assets/audio/sfx/UIClick.mp3", "static")
+                        local uiclick = base_click_sound
+                        if furniture.click_sound then
+                            uiclick = furniture.click_sound
+                        end
+                        uiclick:setPitch(math.random() * 0.5 + 0.8)
                         love.audio.play(uiclick)
                         furniture.on_clicked(world, furniture)
                     end
