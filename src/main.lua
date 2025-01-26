@@ -14,6 +14,10 @@ local world = {
     currentRoom = nil,
 }
 
+local fade_out_factor = 0
+local has_resized_for_outro = false
+local outro_font = love.graphics.newFont("assets/elliott.ttf", 32)
+
 function love.load()
     -- Window setup
     love.window.setTitle("Hooky and Smoochus <3")
@@ -43,6 +47,7 @@ function love.load()
     
     -- Tasks
     world.task_num = 0
+    world.complete = false
 
     -- Helper
     world.find_furn = function(furn_name)
@@ -67,10 +72,27 @@ function love.update(dt)
     else
         love.audio.play(ambience)
     end
+    love.graphics.setColor(1, 1, 1, 1)
     world.currentRoom:update(world, dt)
+    if world.complete then
+        fade_out_factor = fade_out_factor + dt
+    end
     input.reset()
 end
 
 function love.draw()
     world.currentRoom:draw(world)
+
+    love.graphics.setColor(20/255, 16/255, 19/255, math.min(fade_out_factor / 3, 1))
+    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+
+    if fade_out_factor > 6 then
+        if not has_resized_for_outro then
+            love.window.setMode(800, 600)
+            has_resized_for_outro = true
+        end
+        outro_text = love.graphics.newText(outro_font, "Thank you for playing!\nMade with LOVE2D by James, Angus, And Braeden.\nCozy Winter Jam 2025")
+        love.graphics.setColor(0.8, 0.8, 0.8, 1)
+        love.graphics.draw(outro_text, love.graphics.getWidth() / 2 - outro_text:getWidth() / 2, love.graphics.getHeight() / 2 - outro_text:getHeight() / 2)
+    end
 end

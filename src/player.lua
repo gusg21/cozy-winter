@@ -31,6 +31,8 @@ local function pointInConvexPolygon(x, y, poly)
 end
 
 local function player_update(player, world, dt)
+    if world.complete then return end
+
     -- Do WASD movement
     if not world.currentRoom.editing then
         local in_room = true
@@ -117,7 +119,7 @@ local function player_update(player, world, dt)
                     if furniture.on_clicked ~= nil then
                         local uiclick = love.audio.newSource("assets/audio/sfx/UIClick.mp3", "static")
                         love.audio.play(uiclick)
-                        furniture.on_clicked(world)
+                        furniture.on_clicked(world, furniture)
                     end
                 end
             end
@@ -132,7 +134,7 @@ local function player_draw(player)
     end
 
     -- Check if player flipped
-    love.graphics.draw(player.image, player.pos.x, player.pos.y, 0, flip_x, 1,
+    love.graphics.draw(player.image, player.pos.x, player.pos.y - 10, 0, flip_x, 1,
         player.image:getWidth() / 2, player.image:getHeight() / 2)
 
     if player.held_item ~= nil then

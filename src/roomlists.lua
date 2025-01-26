@@ -43,7 +43,13 @@ return {
             colliders = { 322, 312, 332, 248, 450, 260, 448, 324 },
             on_clicked = function(world, furn)
                 -- give items to Smoochus
-                if not world.player.held_item then
+                if not world.player.held_item and world.task_num ~= 3 then
+                    return
+                end
+
+                if world.task_num == 3 then
+                    world.complete = true
+                    furn.image = love.graphics.newImage("assets/furniture/bunk_bed_both.png")
                     return
                 end
 
@@ -62,7 +68,10 @@ return {
             blankets_image = love.graphics.newImage("assets/furniture/folded_blankets.png"),
             hot_choco_image = love.graphics.newImage("assets/furniture/hot_chocolate.png"),
             game_console_image = love.graphics.newImage("assets/furniture/game_console.png"),
+            hooky_image = love.graphics.newImage("assets/player/hooky.png"),
             custom_draw = function(world, furn, x, y)
+                if world.complete then return end
+
                 local xx = x + 15
                 local yy = y - 77 + (math.sin(love.timer.getTime()) * 4.0)
                 love.graphics.draw(furn.ui_bg, xx, yy)
@@ -74,6 +83,9 @@ return {
                 end
                 if world.task_num == 2 then
                     love.graphics.draw(furn.game_console_image, xx + 10, yy + 2)
+                end
+                if world.task_num == 3 then
+                    love.graphics.draw(furn.hooky_image, xx + 10, yy + 2)
                 end
              end,
             can_interact = true,
@@ -210,7 +222,7 @@ return {
             y = -52,
             colliders = { 638, 206, 676, 224, 676, 334, 638, 314 },
             on_clicked = function(world, furn)
-                swap_room(world, world.game_room, 215, 300)
+                swap_room(world, world.game_room, 180, 310)
             end,
             can_interact = true,
             trigger = true,
@@ -391,9 +403,54 @@ return {
         172, 432, 576, 232, 746, 318, 340, 518
     },
     game_room = {
-        
+        {
+            name = "living room door",
+            image = love.graphics.newImage("assets/door_frame.png"),
+            x = 36,
+            y = 28,
+            colliders = { 168, 338, 170, 227, 214, 204, 215, 314 },
+            on_clicked = function(world, furn)
+                swap_room(world, world.livingroom, 630, 330)
+            end,
+            can_interact = true,
+            trigger = true,
+            flip_h = true,
+            always = "infront",
+            cx = -1,
+            cy = 113
+        },
+        {
+            name = "game console",
+            image = love.graphics.newImage("assets/furniture/game_console.png"),
+            x = -30,
+            y = 30,
+            colliders = { 140, 229, 172, 201, 192, 212, 156, 247 },
+            cx = 12,
+            cy = 68,
+            trigger = true,
+            can_interact = true,
+            on_clicked = function (world, furn)
+                furn.hidden = true
+                if world.task_num ~= 2 then return end
+                if world.player.held_item == nil then
+                    world.player:hold_item({
+                        image = furn.image,
+                        furniture = furn,
+                    })
+                end
+            end
+        },
+        {
+            name = "pool table",
+            image = love.graphics.newImage("assets/furniture/pool_table.png"),
+            x = -128,
+            y = -152,
+            colliders = { 70, 249, 212, 171, 282, 212, 146, 287 },
+            cx = 22,
+            cy = 196,
+        },
     },
     game_room_floor_colliders = {
-        172, 432, 576, 232, 746, 318, 340, 518
+        5, 282, 216, 178, 352, 246, 143, 351
     }
 }

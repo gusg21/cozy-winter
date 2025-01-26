@@ -251,7 +251,7 @@ local function room_draw(room, world)
     local player_drawn = false
     local furniture_hovered = false
     for i, furniture in ipairs(depth_draw_table) do
-        if not player_drawn then
+        if not player_drawn and not world.complete then
             if get_player_depth(world.player, room.bg:getHeight()) < get_furniture_depth(furniture) then
                 love.graphics.setColor(1, 1, 1, 1)
                 world.player:draw()
@@ -275,7 +275,11 @@ local function room_draw(room, world)
             local fcx, fcy = get_furniture_screen_center(furniture, room)
             if furniture.image ~= nil then
                 love.graphics.setColor(1, 1, 1, 1)
-                love.graphics.draw(furniture.image, fx, fy)
+                local scale = 1
+                if furniture.flip_h then
+                    scale = -1
+                end
+                love.graphics.draw(furniture.image, fx, fy, 0, scale, 1)
                 if room.editing then
                     love.graphics.setColor(0.2, 0.9, 0.8, 1)
                     love.graphics.circle("fill", fcx, fcy, 5)
@@ -303,7 +307,7 @@ local function room_draw(room, world)
     end
 
     -- If player not drawn, draw them
-    if not player_drawn then
+    if not player_drawn and not world.complete then
         world.player:draw()
         player_drawn = true
     end
