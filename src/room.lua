@@ -21,6 +21,15 @@ local function room_update(room, world, dt)
     end
     -- Edit mode controls
     if room.editing then
+        if input.keyOnce("]") then
+            local mx, my = love.mouse.getPosition()
+            local furniture = world.currentRoom.furniture[room.findex]
+            local cx = (mx - world.currentRoom.bg:getWidth() / 2) - furniture.x
+            local cy = (my - world.currentRoom.bg:getHeight() / 2) - furniture.y
+            furniture.cx = cx
+            furniture.cy = cy
+        end
+
         local shift_down
         if input.keyHeld("lshift") then
             shift_down = 9
@@ -173,21 +182,65 @@ local function room_update(room, world, dt)
     world.player:update(world, dt)
 end
 
+local function get_furniture_depth(furniture)
+    local cx = 0
+    if furniture.cx ~= nil then
+        cx = furniture.cx
+    end
+    local cy = 0
+    if furniture.cy ~= nil then
+        cy = furniture.cy
+    end
+    local depth = furniture.y + cy
+    -- furniture depth override
+    if furniture.always ~= nil then
+        if furniture.always == "infront" then
+            depth = 10000 -- basically infinity
+        elseif furniture.always == "behind" then
+            depth = -10000
+        end
+    end
+
+    return depth
+end
+
+local function get_player_depth(player, height)
+    return player.pos.y - (height / 2)
+end
+
+local function get_furniture_screen_pos(furniture, room)
+    return furniture.x + (room.bg:getWidth() / 2), furniture.y + (room.bg:getHeight() / 2)
+end
+
+local function get_furniture_screen_center(furniture, room)
+    local cx = 0
+    if furniture.cx ~= nil then
+        cx = furniture.cx
+    end
+    local cy = 0
+    if furniture.cy ~= nil then
+        cy = furniture.cy
+    end
+    return furniture.x + (room.bg:getWidth() / 2) + cx, furniture.y + (room.bg:getHeight() / 2) + cy
+end
+
 local function room_draw(room, world) -- TODO: Some things need to always render in front and behind
     -- Draw background
     love.graphics.draw(room.bg, 0, 0)
 
     -- Depth table sort
     local lowest
-    local lowest_num = 10000
+    local lowest_num = 100000
     local depth_draw_table = {}
     while #depth_draw_table ~= #room.furniture do
-        lowest_num = 10000
+        lowest_num = 100000
         for i, furniture in ipairs(room.furniture) do
             if not table_contains(depth_draw_table, furniture) then
-                if furniture.y < lowest_num then
+                local furniture_depth = get_furniture_depth(furniture)
+
+                if furniture_depth < lowest_num then
                     lowest = furniture
-                    lowest_num = furniture.y
+                    lowest_num = furniture_depth
                 end
             end
         end
@@ -199,8 +252,13 @@ local function room_draw(room, world) -- TODO: Some things need to always render
     local furniture_hovered = false
     for i, furniture in ipairs(depth_draw_table) do
         if not player_drawn then
-            if world.player.pos.y - (room.bg:getWidth() / 2) < furniture.y then
+            if get_player_depth(world.player, room.bg:getHeight()) < get_furniture_depth(furniture) then
+                love.graphics.setColor(1, 1, 1, 1)
                 world.player:draw()
+                if room.editing then
+                    love.graphics.setColor(1, 0, 0, 1)
+                    love.graphics.circle("fill", world.player.pos.x, world.player.pos.y, 5)
+                end
                 player_drawn = true
             end
         end
@@ -213,8 +271,14 @@ local function room_draw(room, world) -- TODO: Some things need to always render
         end
 
         if furniture.image ~= nil then
-            love.graphics.draw(furniture.image, furniture.x + (room.bg:getWidth() / 2),
-                furniture.y + room.bg:getHeight() / 2)
+            local fx, fy = get_furniture_screen_pos(furniture, room)
+            local fcx, fcy = get_furniture_screen_center(furniture, room)
+            love.graphics.setColor(1, 1, 1, 1)
+            love.graphics.draw(furniture.image, fx, fy)
+            if room.editing then
+                love.graphics.setColor(0.2, 0.9, 0.8, 1)
+                love.graphics.circle("fill", fcx, fcy, 5)
+            end
         end
 
         love.graphics.setColor(1, 1, 1)
@@ -266,6 +330,9 @@ local function room_draw(room, world) -- TODO: Some things need to always render
 
         love.graphics.print(world.player.pos.x, 400, 0)
         love.graphics.print(world.player.pos.y, 400, 20)
+
+        love.graphics.print(room.furniture[room.findex].cx or "[undef]", 0, 80)
+        love.graphics.print(room.furniture[room.findex].cy or "[undef]", 40, 80)
     end
 end
 

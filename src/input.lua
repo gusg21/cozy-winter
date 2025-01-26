@@ -57,12 +57,18 @@ local function input_mouse_held(button)
 end
 
 local function input_mouse_once(button)
+    
+    print(love.mouse.isDown(button), mouse_down_this_frame)
     if love.mouse.isDown(button) and not mouse_down_this_frame then
         mouse_down_this_frame = true
         return true
     else
         return false
     end
+end
+
+local function input_mouse_reset()
+    mouse_down_this_frame = false
 end
 
 local function input_mouse_in_collider(col)
@@ -83,4 +89,5 @@ return {
     mouseHeld = input_mouse_held,
     mouseOnce = input_mouse_once,
     mouseInCollider = input_mouse_in_collider,
+    reset = input_mouse_reset
 }

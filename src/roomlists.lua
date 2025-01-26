@@ -1,8 +1,10 @@
+local input = require("input")
 local function swap_room(world, newroom, sx, sy)
     world.currentRoom = newroom
     world.player.pos.x = sx
     world.player.pos.y = sy
     love.window.setMode(world.currentRoom.bg:getWidth(), world.currentRoom.bg:getHeight())
+    input.reset()
 end
 
 return {
@@ -12,18 +14,26 @@ return {
             image = love.graphics.newImage("assets/furniture/rug.png"),
             x = -200,
             y = 0,
+            always = "behind"
         },
         {
             name = "wardrobe",
             image = love.graphics.newImage("assets/furniture/wardrobe.png"),
             x = -52,
             y = -176,
+            cx = 9,
+            cy = 174,
+            always = "behind",
+
         },
         {
             name = "nightstand",
             image = love.graphics.newImage("assets/furniture/bed_nightstand.png"),
             x = 12,
             y = -98,
+            cx = 16,
+            cy = 130,
+            always = "behind",
         },
         {
             name = "bunk bed",
@@ -36,12 +46,18 @@ return {
             end,
             can_interact = true,
             trigger = true,
+            cx = 12,
+            cy = 99,
+            always = "behind",
         },
         {
             name = "cat bed",
             image = love.graphics.newImage("assets/furniture/cat-bed.png"),
             x = -62,
             y = 92,
+            always = "behind",
+            cx = 69,
+            cy = 13
         },
         {
             name = "living room door",
@@ -54,6 +70,7 @@ return {
             end,
             can_interact = true,
             trigger = true,
+            always = "infront"
         },
 
         -- TODO: FIX POS IN PLAYER, MAKE ALL COLLIDERS
@@ -70,6 +87,8 @@ return {
             y = -302,
             colliders = { 324, 196, 364, 176, 404, 198, 368, 216 },
             trigger = false,
+            cx = 47,
+            cy = 195,
         },
         {
             name = "tv stand",
@@ -78,6 +97,8 @@ return {
             y = -164,
             colliders = { 438, 266, 486, 238, 610, 302, 560, 326 },
             trigger = false,
+            cx = 5,
+            cy = 123,
         },
         {
             name = "side table",
@@ -89,6 +110,8 @@ return {
                 -- pick up mug
             end,
             trigger = false,
+            cx = 16,
+            cy = 141
         },
         {
             name = "couch",
@@ -98,6 +121,8 @@ return {
             colliders = { 356, 316, 404, 292, 526, 354, 480, 376 },
             can_interact = false,
             trigger = false,
+            cx = 1,
+            cy = 62,
         },
         {
             name = "bedroom door",
@@ -105,7 +130,7 @@ return {
             y = -52,
             colliders = { 410, 92, 452, 114, 452, 221, 410, 200 },
             on_clicked = function(world)
-                swap_room(world, world.bedroom, 215, 300)
+                swap_room(world, world.bedroom, 160, 361)
             end,
             can_interact = true,
             trigger = true,
@@ -128,12 +153,15 @@ return {
             y = 100,
             colliders = { 350, 524, 402, 492, 452, 522, 400, 550 },
             trigger = false,
+            cx = 48,
+            cy = 109,
         },
         {
             name = "rug",
             image = love.graphics.newImage("assets/furniture/living_room_bug.png"),
-            x = -172,
-            y = 24,
+            x = -24,
+            y = -61,
+            always = "behind",
         },
         {
             name = "shelves",
@@ -144,10 +172,12 @@ return {
         {
             name = "cat tree",
             image = love.graphics.newImage("assets/furniture/cat_tree.png"),
-            x = 116,
-            y = 16,
+            x = 112,
+            y = 10,
             colliders = { 480, 376, 526, 354, 570, 376, 526, 398 },
             trigger = false,
+            cx = 2,
+            cy = 57,
         },
         {
             name = "kitchen door",
@@ -160,6 +190,7 @@ return {
             end,
             can_interact = true,
             trigger = true,
+            always = "infront"
         },
     },
     livingroom_floorcolliders =
