@@ -111,11 +111,22 @@ return {
             trigger = true,
         },
         {
+            name = "gameroom door",
+            x = -24,
+            y = -52,
+            colliders = { 638, 206, 676, 224, 676, 334, 638, 314 },
+            on_clicked = function(world)
+                swap_room(world, world.bedroom, 215, 300)
+            end,
+            can_interact = true,
+            trigger = true,
+        },
+        {
             name = "plant",
             image = love.graphics.newImage("assets/furniture/living_room_plant.png"),
             x = -32,
             y = 100,
-            colliders = { 410, 92, 452, 114, 452, 221, 410, 200 },
+            colliders = { 350, 524, 402, 492, 452, 522, 400, 550 },
             trigger = false,
         },
         {
@@ -129,15 +140,13 @@ return {
             image = love.graphics.newImage("assets/furniture/living_room_shelves.png"),
             x = -380,
             y = -140,
-            colliders = { 410, 92, 452, 114, 452, 221, 410, 200 },
-            trigger = false,
         },
         {
             name = "cat tree",
             image = love.graphics.newImage("assets/furniture/cat_tree.png"),
             x = 116,
             y = 16,
-            colliders = { 410, 92, 452, 114, 452, 221, 410, 200 },
+            colliders = { 480, 376, 526, 354, 570, 376, 526, 398 },
             trigger = false,
         },
         {
