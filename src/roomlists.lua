@@ -70,7 +70,7 @@ return {
             image = love.graphics.newImage("assets/furniture/grandfather_clock.png"),
             x = -64,
             y = -302,
-            colliders = { 360, 318, 408, 298, 526, 354, 480, 376 },
+            colliders = { 324, 196, 364, 176, 404, 198, 366, 216 },
             trigger = false,
         },
         {
@@ -78,7 +78,7 @@ return {
             image = love.graphics.newImage("assets/furniture/tv_stand.png"),
             x = 52,
             y = -164,
-            colliders = { 360, 318, 408, 298, 526, 354, 480, 376 },
+            colliders = { 440, 268, 484, 244, 608, 302, 560, 326 },
             trigger = false,
         },
         {
@@ -86,7 +86,7 @@ return {
             image = love.graphics.newImage("assets/furniture/living_room_side_table.png"),
             x = -84,
             y = -143,
-            colliders = { 360, 318, 408, 298, 526, 354, 480, 376 },
+            colliders = { 312, 300, 364, 274, 404, 292, 348, 320 },
             on_clicked = function(world)
                 -- pick up mug
             end,
@@ -114,6 +114,38 @@ return {
             end,
             can_interact = true,
             trigger = true,
+        },
+        {
+            name = "plant",
+            image = love.graphics.newImage("assets/furniture/living_room_plant.png"),
+            x = -32,
+            y = 100,
+            colliders = { 372, 528, 402, 542, 432, 528, 402, 512 },
+            trigger = false,
+        },
+        {
+            name = "bug",
+            image = love.graphics.newImage("assets/furniture/living_room_bug.png"),
+            x = -172,
+            y = 24,
+            colliders = { 410, 90, 452, 112, 452, 220, 410, 199 },
+            trigger = false,
+        },
+        {
+            name = "shelves",
+            image = love.graphics.newImage("assets/furniture/living_room_shelves.png"),
+            x = -380,
+            y = -140,
+            colliders = { 410, 90, 452, 112, 452, 220, 410, 199 },
+            trigger = false,
+        },
+        {
+            name = "cat tree",
+            image = love.graphics.newImage("assets/furniture/cat_tree.png"),
+            x = 116,
+            y = 16,
+            colliders = { 410, 90, 452, 112, 452, 220, 410, 199 },
+            trigger = false,
         },
     },
     livingroom_floorcolliders =

@@ -30,7 +30,7 @@ local function pointInConvexPolygon(x, y, poly)
     return true
 end
 
-local function player_update(player, world, dt)
+local function player_update(player, world, dt) -- TODO: Bugfix collider code
     -- Do WASD movement
     if not world.currentRoom.editing then
         local in_room = true
